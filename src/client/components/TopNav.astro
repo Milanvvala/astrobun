@@ -1,0 +1,74 @@
+---
+---
+
+<nav data-topnav>
+  <div class="row">
+    <div class="col-4 branding">
+      <button data-sidebar-toggle aria-label="Toggle sidebar menu" class="small" onclick="toggleSidebar()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="16" y2="17"/></svg>
+      </button>
+
+      <a href="/" class="favicon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/" class="logo">RiseBox</a>
+    </div>
+
+    <div class="col-8 justify-end hstack">
+      <a href="/">Dashboard</a>
+      <a href="#">Analytics</a>
+      <a href="#">Reports</a>
+      <ot-dropdown>
+        <button popovertarget="nav-menu" class="outline small">
+          More
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <menu popover id="nav-menu">
+          <a href="#" role="menuitem">Settings</a>
+          <a href="#" role="menuitem">Profile</a>
+          <hr>
+          <a href="#" role="menuitem">Help</a>
+          <a href="#" role="menuitem">Documentation</a>
+        </menu>
+      </ot-dropdown>
+    </div>
+  </div>
+</nav>
+
+<style>
+  nav[data-topnav] {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .branding {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .favicon {
+    display: flex;
+    align-items: center;
+  }
+
+  .favicon svg {
+    color: var(--primary);
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: var(--text-5);
+    color: var(--foreground);
+  }
+
+  .logo:hover {
+    background: transparent;
+    color: var(--primary);
+  }
+
+  button[data-sidebar-toggle] svg {
+    color: var(--foreground);
+  }
+</style>

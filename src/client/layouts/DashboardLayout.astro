@@ -1,0 +1,122 @@
+---
+import TopNav from '../components/TopNav.astro';
+import Sidebar from '../components/Sidebar.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/client/styles/theme.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@knadh/oat/oat.min.css" />
+    <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
+    <meta name="generator" content={Astro.generator} />
+    <title>RiseBox Dashboard</title>
+    
+    <script is:inline>
+      // Initialize theme before page renders
+      (function() {
+        var t = localStorage.getItem('theme') || 'light';
+        document.documentElement.style.colorScheme = t;
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+
+      // Theme toggle function
+      window.toggleTheme = function() {
+        var html = document.documentElement;
+        var current = html.getAttribute('data-theme') || 'light';
+        var next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        html.style.colorScheme = next;
+        localStorage.setItem('theme', next);
+        
+        // Force style recalculation
+        document.body.style.display = 'none';
+        document.body.offsetHeight; // trigger reflow
+        document.body.style.display = '';
+      };
+
+      // Sidebar toggle function
+      window.toggleSidebar = function() {
+        var layout = document.querySelector('[data-sidebar-layout]');
+        if (layout.hasAttribute('data-sidebar-hidden')) {
+          layout.removeAttribute('data-sidebar-hidden');
+        } else {
+          layout.setAttribute('data-sidebar-hidden', '');
+        }
+      };
+    </script>
+  </head>
+  <body data-sidebar-layout="always">
+    <TopNav />
+    <Sidebar />
+    <main>
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: var(--font-sans);
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  main {
+    min-height: 100%;
+  }
+
+  [data-sidebar-layout] {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+  }
+
+  [data-sidebar-layout] > nav[data-topnav] {
+    grid-column: 1 / -1;
+  }
+
+  [data-sidebar-layout] > aside[data-sidebar] {
+    grid-row: 2;
+    width: 240px;
+    position: sticky;
+    top: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding-top: 0;
+    transform: translateX(0);
+    transition: transform 0.3s ease, width 0.3s ease;
+  }
+
+  [data-sidebar-layout][data-sidebar-hidden] > aside[data-sidebar] {
+    transform: translateX(-100%);
+    width: 0;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-6);
+    transition: max-width 0.3s ease;
+  }
+
+  [data-sidebar-layout][data-sidebar-hidden] .container {
+    max-width: 100%;
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+</style>

@@ -1,0 +1,341 @@
+---
+import RecentOrders from './RecentOrders.astro';
+import AccountSettings from './AccountSettings.astro';
+---
+
+<section class="section">
+  <div class="hstack justify-between mb-6">
+    <div class="hstack">
+      <h2 style="margin: 0;">Dashboard</h2>
+      <span class="badge success">Live</span>
+      <span class="badge secondary">v1.0.0</span>
+    </div>
+    <div class="hstack">
+      <label class="hstack gap-2" style="margin: 0;">
+        <input type="checkbox" role="switch" checked> Auto-refresh
+      </label>
+
+      <ot-dropdown>
+        <button popovertarget="export-menu" class="outline small">
+          Export ▾
+        </button>
+        <menu popover id="export-menu">
+          <button role="menuitem">Export as CSV</button>
+          <button role="menuitem">Export as JSON</button>
+          <hr>
+          <button role="menuitem">Print report</button>
+        </menu>
+      </ot-dropdown>
+
+      <button class="small" data-tooltip="Refresh data now">
+        ↻ Refresh
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="row">
+    <div class="col-3">
+      <article class="card">
+        <header>
+          <small class="text-light">Revenue</small>
+          <div class="stat-value">$42,128</div>
+          <small class="text-light"><span class="badge success">+12.5%</span> vs last month</small>
+        </header>
+        <footer>
+          <progress value="72" max="100"></progress>
+        </footer>
+      </article>
+    </div>
+    <div class="col-3">
+      <article class="card">
+        <header>
+          <small class="text-light">Active Users</small>
+          <div class="stat-value">2,847</div>
+          <small class="text-light"><span class="badge warning">-3.2%</span> vs last month</small>
+        </header>
+        <footer>
+          <progress value="58" max="100"></progress>
+        </footer>
+      </article>
+    </div>
+    <div class="col-3">
+      <article class="card">
+        <header>
+          <small class="text-light">Retention</small>
+          <div class="stat-value">3.24%</div>
+          <small class="text-light"><span class="badge success">+0.8%</span> vs last month</small>
+        </header>
+        <footer>
+          <meter value="0.65" min="0" max="1" low="0.3" high="0.7" optimum="1"></meter>
+        </footer>
+      </article>
+    </div>
+    <div class="col-3">
+      <article class="card">
+        <header>
+          <small class="text-light">Uptime</small>
+          <div class="stat-value">99.99%</div>
+          <small class="text-light"><span class="badge">Healthy</span></small>
+        </header>
+        <footer>
+          <meter value="0.9998" min="0" max="1" low="0.95" high="0.99" optimum="1"></meter>
+        </footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <article class="card">
+    <ot-tabs>
+      <div role="tablist">
+        <button role="tab">Overview</button>
+        <button role="tab">Performance</button>
+        <button role="tab">Reports</button>
+      </div>
+
+      <div role="tabpanel">
+        <h4>Weekly Traffic</h4>
+        <div class="faux-bar-chart">
+          <div class="faux-bar" style="height: 45%;" data-tooltip="Mon: 1,204"></div>
+          <div class="faux-bar" style="height: 62%;" data-tooltip="Tue: 1,659"></div>
+          <div class="faux-bar" style="height: 78%;" data-tooltip="Wed: 2,087"></div>
+          <div class="faux-bar" style="height: 55%;" data-tooltip="Thu: 1,472"></div>
+          <div class="faux-bar" style="height: 90%;" data-tooltip="Fri: 2,411"></div>
+          <div class="faux-bar" style="height: 70%;" data-tooltip="Sat: 1,874"></div>
+          <div class="faux-bar" style="height: 40%;" data-tooltip="Sun: 1,071"></div>
+        </div>
+        <blockquote>This dummy kitchensink dashboard page shows various UI components and layouts built with Oat.</blockquote>
+      </div>
+
+      <div role="tabpanel">
+        <article class="card" aria-busy="true" data-spinner="large overlay">
+          <header><h4>Performance Metrics</h4></header>
+          <p>Fetching latest benchmark data...</p>
+          <div class="row mt-4">
+            <div class="col-6">
+              <strong>Avg Response</strong>
+              <p>142 ms</p>
+              <progress value="14" max="100"></progress>
+            </div>
+            <div class="col-6">
+              <strong>Error Rate</strong>
+              <p>0.03%</p>
+              <progress value="3" max="100"></progress>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div role="tabpanel">
+        <h4>Monthly Summary</h4>
+        <div class="table">
+          <table>
+            <thead>
+              <tr><th>Metric</th><th>Value</th><th>Change</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Page views</td><td>1,234,567</td><td><span class="badge success">+8%</span></td></tr>
+              <tr><td>Bounce rate</td><td>42.3%</td><td><span class="badge danger">+2.1%</span></td></tr>
+              <tr><td>Avg session</td><td>4m 12s</td><td><span class="badge success">+15s</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ot-tabs>
+  </article>
+</section>
+
+<section class="section">
+  <div class="row">
+    <div class="col-6">
+      <article class="card">
+        <header><h3>Recent Activity</h3></header>
+
+        <div class="vstack gap-4">
+          <div class="activity-item">
+            <div class="hstack">
+              <span class="badge success">Deploy</span>
+              <strong>Production deploy #1847</strong>
+            </div>
+            <small class="text-lighter">2 minutes ago by <strong>alice</strong></small>
+          </div>
+
+          <div class="activity-item">
+            <div class="hstack">
+              <span class="badge warning">Alert</span>
+              <strong>High memory usage on worker-3</strong>
+            </div>
+            <small class="text-lighter">18 minutes ago — <em>auto-resolved</em></small>
+          </div>
+
+          <div class="activity-item">
+            <div class="hstack">
+              <span class="badge">Merge</span>
+              <strong>PR #392: Update auth middleware</strong>
+            </div>
+            <small class="text-lighter">1 hour ago by <strong>bob</strong></small>
+          </div>
+
+          <div class="activity-item">
+            <div class="hstack">
+              <span class="badge danger">Incident</span>
+              <strong>API latency spike (resolved)</strong>
+            </div>
+            <small class="text-lighter">3 hours ago — duration: 4m 22s</small>
+          </div>
+
+          <div class="activity-item">
+            <div class="hstack">
+              <span class="badge secondary">Config</span>
+              <strong>Updated rate limits</strong>
+            </div>
+            <small class="text-lighter">5 hours ago by <strong>carol</strong></small>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="col-6">
+      <article class="card">
+        <header>
+          <h3>Server Status</h3>
+          <small class="text-light hstack gap-2">
+            <span aria-busy="true" data-spinner="small"></span> Monitoring
+          </small>
+        </header>
+
+        <div class="vstack gap-4">
+          <div>
+            <div class="hstack justify-between">
+              <strong>CPU Usage</strong>
+              <span class="badge success">Normal</span>
+            </div>
+            <progress value="42" max="100"></progress>
+            <small class="text-lighter">42% — 8 cores</small>
+          </div>
+
+          <div>
+            <div class="hstack justify-between">
+              <strong>Memory</strong>
+              <span class="badge warning">High</span>
+            </div>
+            <progress value="78" max="100"></progress>
+            <small class="text-lighter">12.5 / 16 GB used</small>
+          </div>
+
+          <div>
+            <div class="hstack justify-between">
+              <strong>Disk I/O</strong>
+              <span class="badge success">Normal</span>
+            </div>
+            <meter value="0.35" min="0" max="1" low="0.3" high="0.7" optimum="0"></meter>
+            <small class="text-lighter">Read: 145 MB/s — Write: 82 MB/s</small>
+          </div>
+
+          <div>
+            <div class="row">
+              <div class="col-6">
+                <strong>Network In</strong>
+                <p style="margin:0;">1.2 Gbps</p>
+                <progress value="60" max="100"></progress>
+              </div>
+              <div class="col-6">
+                <strong>Network Out</strong>
+                <p style="margin:0;">840 Mbps</p>
+                <progress value="42" max="100"></progress>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<RecentOrders />
+
+<section class="section">
+  <div class="row">
+    <div class="col-6">
+      <article class="card">
+        <header><h3>System Notifications</h3></header>
+
+        <div role="alert" class="mb-4">
+          <strong>Info:</strong> System maintenance scheduled for Sunday 2:00 AM UTC.
+        </div>
+        <div role="alert" data-variant="success" class="mb-4">
+          <strong>Success:</strong> All backups completed successfully.
+        </div>
+        <div role="alert" data-variant="warning" class="mb-4">
+          <strong>Warning:</strong> SSL certificate expires in 7 days.
+        </div>
+        <div role="alert" data-variant="error" class="mb-4">
+          <strong>Error:</strong> Payment gateway timeout — 3 transactions affected.
+        </div>
+
+        <hr>
+
+        <h4>Toast Notifications</h4>
+        <div class="hstack mt-4">
+          <button class="small" onclick="ot.toast('Deployment completed.', 'Success', { variant: 'success' })">Success toast</button>
+          <button class="small outline" onclick="ot.toast('Disk usage at 89%.', 'Warning', { variant: 'warning', placement: 'top-left' })">Warning toast</button>
+          <button class="small" data-variant="danger" onclick="ot.toast('Connection lost.', 'Error', { variant: 'danger', placement: 'bottom-right' })">Error toast</button>
+          <button class="small" data-variant="secondary" onclick="ot.toast('Build #1847 started.', 'Info')">Info toast</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="col-6">
+      <article class="card">
+        <header><h3>FAQ</h3></header>
+
+        <details name="faq">
+          <summary>How do I reset my password?</summary>
+          <p>Navigate to <strong>Settings → Security</strong> and click <em>"Reset password"</em>. You'll receive a confirmation email with a link.</p>
+        </details>
+
+        <details name="faq">
+          <summary>What export formats are supported?</summary>
+          <p>We support the following formats:</p>
+          <ul>
+            <li><code>CSV</code> — Comma-separated values</li>
+            <li><code>JSON</code> — JavaScript Object Notation</li>
+            <li><code>XLSX</code> — Microsoft Excel</li>
+          </ul>
+        </details>
+
+        <details name="faq">
+          <summary>How is billing calculated?</summary>
+          <p>Billing is based on <strong>active users</strong> per month:</p>
+          <ol>
+            <li>Base plan includes up to <mark>50 users</mark></li>
+            <li>Each additional user is <code>$2/month</code></li>
+            <li>Enterprise pricing available on request</li>
+          </ol>
+        </details>
+
+        <details name="faq">
+          <summary>Can I integrate with third-party services?</summary>
+          <p>Yes! We offer integrations via our <strong>REST API</strong> and <em>webhooks</em>. See the <a href="#">API documentation</a> for details.</p>
+        </details>
+      </article>
+    </div>
+  </div>
+</section>
+
+<AccountSettings />
+
+<section class="card">
+  <h5>Loading placeholder</h5>
+  <div role="status" class="skeleton line" style="width: 100%;"></div>
+  <div role="status" class="skeleton line" style="width: 80%;"></div>
+  <div role="status" class="skeleton line" style="width: 60%;"></div>
+  <div class="hstack mt-4">
+    <div role="status" class="skeleton box"></div>
+    <div role="status" class="skeleton box"></div>
+    <div role="status" class="skeleton box"></div>
+  </div>
+</section>

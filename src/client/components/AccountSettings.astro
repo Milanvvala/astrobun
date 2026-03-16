@@ -1,0 +1,124 @@
+---
+---
+
+<section class="section">
+  <article class="card">
+    <header>
+      <h3>Account Settings</h3>
+      <p class="text-light">Manage your profile and preferences.</p>
+    </header>
+
+    <form onsubmit="event.preventDefault(); ot.toast('Settings saved!', 'Success', { variant: 'success' });">
+      <div class="row">
+        <div class="col-6">
+          <label data-field>
+            Full Name
+            <input type="text" placeholder="Jane Doe" value="Jane Doe">
+          </label>
+        </div>
+        <div class="col-6">
+          <div data-field="error">
+            <label for="settings-email">Email</label>
+            <input type="email" id="settings-email" value="jane@" aria-invalid="true" aria-describedby="email-err">
+            <div id="email-err" class="error" role="status">Please enter a valid email address.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <label data-field>
+            Password
+            <input type="password" placeholder="........">
+            <small data-hint>Minimum 8 characters with one number.</small>
+          </label>
+        </div>
+        <div class="col-6">
+          <div data-field>
+            <label for="settings-role">Role</label>
+            <select id="settings-role" aria-label="Select a role">
+              <option>Administrator</option>
+              <option>Editor</option>
+              <option>Viewer</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <label data-field>
+            Start Date
+            <input type="date" value="2025-01-15">
+          </label>
+        </div>
+        <div class="col-6">
+          <label data-field>
+            Next Review
+            <input type="datetime-local" value="2025-06-15T09:00">
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <label data-field>
+            Avatar
+            <input type="file" accept="image/*">
+          </label>
+        </div>
+        <div class="col-6">
+          <label data-field>
+            Brand Color
+            <input type="color" value="#6366f1">
+          </label>
+        </div>
+      </div>
+
+      <label data-field>
+        Notification Volume
+        <input type="range" min="0" max="100" value="65">
+      </label>
+
+      <label data-field>
+        Bio
+        <textarea rows="3" placeholder="Tell us about yourself...">This entire dashboard is built with Oat.</textarea>
+      </label>
+
+      <fieldset class="group" style="max-width: 500px;">
+        <legend>Website</legend>
+        <input type="url" placeholder="yoursite.com" value="janedoe.dev">
+        <button type="button" class="outline">Verify</button>
+      </fieldset>
+
+      <fieldset class="mt-4">
+        <legend>Email Preferences</legend>
+        <label><input type="checkbox" checked> Product updates</label>
+        <label><input type="checkbox"> Marketing emails</label>
+        <label><input type="checkbox" checked> Security alerts</label>
+      </fieldset>
+
+      <fieldset class="hstack mt-4">
+        <legend>Theme</legend>
+        <label><input type="radio" name="theme" value="light"> Light</label>
+        <label><input type="radio" name="theme" value="dark"> Dark</label>
+        <label><input type="radio" name="theme" value="auto" checked> System</label>
+      </fieldset>
+
+      <div class="mt-4 vstack gap-2">
+        <label>
+          <input type="checkbox" role="switch" checked> Enable two-factor authentication
+        </label>
+        <label>
+          <input type="checkbox" role="switch"> Enable API access
+        </label>
+      </div>
+
+      <footer class="hstack mt-6">
+        <button type="submit">Save Changes</button>
+        <button type="button" class="outline">Cancel</button>
+        <button type="button" class="ghost" data-variant="danger">Delete Account</button>
+      </footer>
+    </form>
+  </article>
+</section>

@@ -1,0 +1,132 @@
+---
+---
+
+<section class="section">
+  <article class="card">
+    <header>
+      <h3>Recent Orders</h3>
+    </header>
+
+    <div class="hstack justify-between mb-4">
+      <fieldset class="group" style="margin: 0; max-width: 300px;">
+        <input type="search" placeholder="Search orders..." aria-label="Search orders" />
+        <button class="outline">Search</button>
+      </fieldset>
+
+      <menu class="buttons">
+        <li><button class="ghost small">All</button></li>
+        <li><button class="outline small">Pending</button></li>
+        <li><button class="outline small">Shipped</button></li>
+      </menu>
+    </div>
+
+    <div class="table">
+      <table>
+        <thead>
+          <tr>
+            <th><label><input type="checkbox" aria-label="Select all"></label></th>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><label><input type="checkbox" aria-label="Select order"></label></td>
+            <td><code>#ORD-7291</code></td>
+            <td>Alice Johnson</td>
+            <td>$249.00</td>
+            <td><span class="badge success">Delivered</span></td>
+            <td>
+              <menu class="buttons">
+                <li><button class="ghost small">View</button></li>
+                <li><button class="ghost small">Edit</button></li>
+              </menu>
+            </td>
+          </tr>
+          <tr>
+            <td><label><input type="checkbox" aria-label="Select order"></label></td>
+            <td><code>#ORD-7292</code></td>
+            <td>Bob Chen</td>
+            <td>$1,450.00</td>
+            <td><span class="badge warning">Pending</span></td>
+            <td>
+              <menu class="buttons">
+                <li><button class="ghost small">View</button></li>
+                <li><button class="ghost small">Edit</button></li>
+              </menu>
+            </td>
+          </tr>
+          <tr>
+            <td><label><input type="checkbox" aria-label="Select order"></label></td>
+            <td><code>#ORD-7293</code></td>
+            <td>Carol Davis</td>
+            <td>$89.50</td>
+            <td><span class="badge">Processing</span></td>
+            <td>
+              <menu class="buttons">
+                <li><button class="ghost small">View</button></li>
+                <li><button class="ghost small">Edit</button></li>
+              </menu>
+            </td>
+          </tr>
+          <tr>
+            <td><label><input type="checkbox" aria-label="Select order"></label></td>
+            <td><code>#ORD-7294</code></td>
+            <td>David Park</td>
+            <td>$672.00</td>
+            <td><span class="badge outline">Shipped</span></td>
+            <td>
+              <menu class="buttons">
+                <li><button class="ghost small">View</button></li>
+                <li><button class="ghost small">Edit</button></li>
+              </menu>
+            </td>
+          </tr>
+          <tr>
+            <td><label><input type="checkbox" aria-label="Select order"></label></td>
+            <td><code>#ORD-7295</code></td>
+            <td>Emma Wilson</td>
+            <td>$34.99</td>
+            <td><span class="badge danger">Cancelled</span></td>
+            <td>
+              <menu class="buttons">
+                <li><button class="ghost small">View</button></li>
+                <li><button class="ghost small" commandfor="delete-dialog" command="show-modal" data-variant="danger">Delete</button></li>
+              </menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="hstack mt-4" style="justify-content: flex-end;">
+      <small class="text-light">Showing 1-5 of 243</small>
+      <menu class="buttons">
+        <li><button class="outline small" disabled>← Prev</button></li>
+        <li><button class="outline small">1</button></li>
+        <li><button class="outline small">2</button></li>
+        <li><button class="outline small">3</button></li>
+        <li><button class="outline small">Next →</button></li>
+      </menu>
+    </div>
+  </article>
+
+  <dialog id="delete-dialog" closedby="any">
+    <form method="dialog">
+      <header>
+        <h3>Confirm Deletion</h3>
+        <p>This action cannot be undone.</p>
+      </header>
+      <div>
+        <p>Are you sure you want to delete order <strong>#ORD-7295</strong>? This will permanently remove it from the system.</p>
+      </div>
+      <footer>
+        <button type="button" commandfor="delete-dialog" command="close" class="outline">Cancel</button>
+        <button data-variant="danger" value="confirm">Delete Order</button>
+      </footer>
+    </form>
+  </dialog>
+</section>
