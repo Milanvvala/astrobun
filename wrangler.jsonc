@@ -5,30 +5,64 @@
   "main": "src/server/index.ts",
   // Set this to today's date
   "compatibility_date": "2026-03-13",
-//   "workers_dev": false,
-//   "route": {
-//     "pattern": "example.org/*",
-//     "zone_name": "example.org",
-//   },
-//   "kv_namespaces": [
-//     {
-//       "binding": "<MY_NAMESPACE>",
-//       "id": "<KV_ID>",
-//     },
-//   ],
-//   "env": {
-//     "staging": {
-//       "name": "my-worker-staging",
-//       "route": {
-//         "pattern": "staging.example.org/*",
-//         "zone_name": "example.org",
-//       },
-//       "kv_namespaces": [
-//         {
-//           "binding": "<MY_NAMESPACE>",
-//           "id": "<STAGING_KV_ID>",
-//         },
-//       ],
-//     },
-//   },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  //   "workers_dev": false,
+  //   "route": {
+  //     "pattern": "example.org/*",
+  //     "zone_name": "example.org",
+  //   },
+  //   "kv_namespaces": [
+  //     {
+  //       "binding": "<MY_NAMESPACE>",
+  //       "id": "<KV_ID>",
+  //     },
+  //   ],
+  //   "env": {
+  //     "staging": {
+  //       "name": "my-worker-staging",
+  //       "route": {
+  //         "pattern": "staging.example.org/*",
+  //         "zone_name": "example.org",
+  //       },
+  //       "kv_namespaces": [
+  //         {
+  //           "binding": "<MY_NAMESPACE>",
+  //           "id": "<STAGING_KV_ID>",
+  //         },
+  //       ],
+  //     },
+  //   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dojo_local_db",
+      "database_id": "123",
+      "migrations_dir": "./src/server/db/migrations"
+    }
+  ],
+  "env": {
+    "staging": {
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "CF_ACCESS_DOMAIN": "https://valamilan44.cloudflareaccess.com",
+        "POLICY_AUD": "2bafd5ec9e45e624b010310322138a2b8998ebe61bf811d19c179a369c61375f"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "dojo_staging_db",
+          "database_id": "3949b8aa-503c-452e-8e3c-0cf0df0512ba",
+          "migrations_dir": "./src/server/db/migrations"
+        }
+      ],
+    },
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production"
+      }
+    }
+  }
 }
