@@ -24,6 +24,8 @@ todoRoutes.post("/api/todos", async (c) => {
     title: body.title,
     description: body.description || null,
     completed: body.completed || false,
+    pinned: body.pinned || false,
+    order: body.order || 0,
   }).returning();
   return c.json(newTodo, 201);
 });
@@ -47,6 +49,8 @@ todoRoutes.put("/api/todos/:id", async (c) => {
       ...(body.title !== undefined && { title: body.title }),
       ...(body.description !== undefined && { description: body.description }),
       ...(body.completed !== undefined && { completed: body.completed }),
+      ...(body.pinned !== undefined && { pinned: body.pinned }),
+      ...(body.order !== undefined && { order: body.order }),
       updatedAt: new Date(),
     })
     .where(eq(schema.todos.id, id))

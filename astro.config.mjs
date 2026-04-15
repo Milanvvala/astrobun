@@ -2,11 +2,23 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 
+import vue from '@astrojs/vue';
+
+import cloudflare from '@astrojs/cloudflare';
+
+import { resolve } from 'path';
+
 // https://astro.build/config
 export default defineConfig({
-    srcDir:'./src/client',
+  srcDir: './src/client',
+  output: 'server',
 
-    vite: {
+  vite: {
+    resolve: {
+      alias: {
+        '@': resolve('./src/client')
+      }
+    },
     server: {
       proxy: {
         "/api": {
@@ -16,5 +28,6 @@ export default defineConfig({
     }
   },
 
-    integrations: [react()]
+  integrations: [react(), vue()],
+  adapter: cloudflare()
 });

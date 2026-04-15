@@ -24,6 +24,8 @@ export const todos = sqliteTable("todos", {
     title: text("title").notNull(),
     description: text("description"),
     completed: integer("completed", { mode: "boolean" }).notNull().default(false),
+    pinned: integer("pinned", { mode: "boolean" }).notNull().default(false),
+    order: integer("order").notNull().default(0),
     createdAt: integer("created_at", { mode: "timestamp" })
         .notNull()
         .default(new Date()),

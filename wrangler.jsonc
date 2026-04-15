@@ -43,6 +43,9 @@
       "migrations_dir": "./src/server/db/migrations"
     }
   ],
+  "vars": {
+    "ENVIRONMENT": "development"
+  },
   "env": {
     "staging": {
       "vars": {

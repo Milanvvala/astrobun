@@ -3,7 +3,7 @@ import { jwtVerify, createRemoteJWKSet } from "jose";
 
 export const accessAuth = createMiddleware(async (c, next) => {
     if (c.env.ENVIRONMENT === "development") {
-        await next();
+        return next();
     }
 
     if (!c.env.POLICY_AUD) {
