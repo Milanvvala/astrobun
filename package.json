@@ -6,12 +6,12 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "client": "bun run astro dev",
-    "build:client": "bun run astro build",
+    "client": "astro dev",
+    "build:client": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "worker": "wrangler dev",
-    "dev": "npx concurrently -k \"npx bun run client\" \"npx bun run worker\"",
+    "dev": "bun run client",
     "dryrun:staging": "bun run build:client && wrangler deploy --dry-run --env staging",
     "dryrun:prod": "bun run build:client && wrangler deploy --dry-run --env production",
     "deploy:staging": "bun run build:client && wrangler deploy --env staging",
@@ -24,17 +24,18 @@
     "test": "bun run create:test:db && bun test && bun run destory:test:db"
   },
   "dependencies": {
-    "@astrojs/vue": "^6.0.0",
+    "@astrojs/react": "^4.2.0",
     "@knadh/oat": "^0.4.2",
-    "@vitejs/plugin-vue": "^6.0.5",
+    "@vitejs/plugin-react": "^4.3.4",
     "astro": "^6.0.4",
     "concurrently": "^9.2.1",
     "drizzle-orm": "^0.45.1",
     "drizzle-seed": "^0.3.1",
     "hono": "^4.12.8",
     "jose": "^6.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "remixicon": "^4.9.1",
-    "vue": "^3.5.30",
     "wrangler": "^4.73.0"
   },
   "devDependencies": {

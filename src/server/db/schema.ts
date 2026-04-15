@@ -19,4 +19,19 @@ export const subscribers = sqliteTable("subscribers", {
     check('email', sql`${table.email} LIKE '%@%.%'`)
 ]);
 
+export const todos = sqliteTable("todos", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    title: text("title").notNull(),
+    description: text("description"),
+    completed: integer("completed", { mode: "boolean" }).notNull().default(false),
+    createdAt: integer("created_at", { mode: "timestamp" })
+        .notNull()
+        .default(new Date()),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+        .notNull()
+        .default(new Date()),
+});
+
 export type NewSubscriber = typeof subscribers.$inferInsert
+export type NewTodo = typeof todos.$inferInsert
+export type Todo = typeof todos.$inferSelect

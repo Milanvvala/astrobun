@@ -1,0 +1,10 @@
+---
+import DashboardLayout from "../layouts/DashboardLayout.astro";
+import TodoList from "../components/TodoList";
+
+export const prerender = false;
+---
+
+<DashboardLayout>
+  <TodoList client:load />
+</DashboardLayout>

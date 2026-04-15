@@ -1,0 +1,52 @@
+.icon-dark {
+  display: none;
+}
+
+[data-theme="dark"] .icon-light {
+  display: none;
+}
+
+[data-theme="dark"] .icon-dark {
+  display: block;
+}
+
+.logo-svg .logo-icon {
+  fill: #0094f7;
+}
+
+[data-theme="dark"] .logo-svg .logo-icon {
+  fill: #ffffff;
+}
+
+.logo-svg .logo-text {
+  fill: #000000;
+}
+
+[data-theme="dark"] .logo-svg .logo-text {
+  fill: #ffffff;
+}
+
+:root {
+  --background: light-dark(#fff, #030712);
+  --foreground: light-dark(#09090b, #fafafa);
+  --card: light-dark(#fff, #0a1628);
+  --card-foreground: light-dark(#09090b, #fafafa);
+  --primary: light-dark(#2563eb, #60a5fa);
+  --primary-foreground: light-dark(#fff, #0c1a32);
+  --secondary: light-dark(#eff6ff, #172240);
+  --secondary-foreground: light-dark(#1d4ed8, #93bbfd);
+  --muted: light-dark(#eff6ff, #172240);
+  --muted-foreground: light-dark(#71717a, #a1a1aa);
+  --faint: light-dark(#f5f9ff, #081020);
+  --faint-foreground: light-dark(#a1a1aa, #71717a);
+  --accent: light-dark(#dbeafe, #1e3a5f);
+  --danger: light-dark(#d32f2f, #f4807b);
+  --danger-foreground: light-dark(#fafafa, #18181b);
+  --success: light-dark(#008032, #6cc070);
+  --success-foreground: light-dark(#fafafa, #18181b);
+  --warning: light-dark(#a65b00, #f0a030);
+  --warning-foreground: #09090b;
+  --border: light-dark(#bfdbfe, #1e3a5f);
+  --input: light-dark(#bfdbfe, #1e3a5f);
+  --ring: light-dark(#2563eb, #60a5fa);
+}
