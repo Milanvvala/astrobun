@@ -1,0 +1,604 @@
+---
+import NavbarToggle from "@/components/NavbarToggle.astro";
+import DashboardNav from "@/components/UI/DashboardNav.astro";
+import Layout from "@/layouts/Layout.astro";
+import { ArrowUp, Calendar, Funnel, DollarSign, PiggyBank, BanknoteArrowDown, BanknoteArrowUp } from "@lucide/astro";
+---
+
+<Layout title="Finance" description="finance">
+  <header><DashboardNav /></header>
+
+  <main
+    class="p-4 h-100 container"
+    style="border-left: 1px solid var(--border); border-right: 1px solid var(--border);"
+  >
+    <div class="row">
+      <article class="card col-4">
+        <header class="hstack justify-between items-center">
+          <h4 class="hstack gap-2"><PiggyBank size={24} /> Balance</h4>
+        </header>
+        <h3 id="balance-amount" style="color: var(--primary)">$0.00</h3>
+      </article>
+
+      <article class="card col-4">
+        <header class="hstack justify-between items-center">
+          <h4 class="hstack gap-2"><BanknoteArrowDown size={24} /> Income</h4>
+          <button id="income-filter" class="ghost small" title="Filter income">
+            <Funnel size={24} />
+          </button>
+        </header>
+        <h3 id="income-amount" style="color: var(--success)">$0.00</h3>
+      </article>
+
+      <article class="card col-4">
+        <header class="hstack justify-between items-center">
+          <h4 class="hstack gap-2"><BanknoteArrowUp size={24} />Expense</h4>
+          <button
+            id="expense-filter"
+            class="ghost small"
+            title="Filter expense"
+          >
+            <Funnel size={24} />
+          </button>
+        </header>
+        <h3 id="expense-amount" style="color: var(--danger)">$0.00</h3>
+      </article>
+    </div>
+
+    <div class="row">
+      <div class="card p-2 mt-4 col-4" style="width: max-content;">
+        <div class="flex justify-between items-center gap-4">
+          <input type="date" id="date-from" class="input" />
+          <span>to</span>
+          <input type="date" id="date-to" class="input" />
+        </div>
+      </div>
+      <div class="mt-4 hstack gap-2">
+        <button id="clear-filters" class="outline small">Clear Filters</button>
+        <button id="load-dummy" class="outline small">Load Dummy Data</button>
+        <button id="remove-dummy" class="outline small danger">Remove All</button>
+      </div>
+    </div>
+    <NavbarToggle mode="show" />
+
+    <div class="mt-4">
+      <button
+        class="primary"
+        commandfor="add-transaction-dialog"
+        command="show-modal">Add Transaction</button
+      >
+    </div>
+
+    <dialog id="add-transaction-dialog" closedby="any" class="card p-4">
+      <form id="transaction-form" method="dialog">
+        <header>
+          <h3>Add Transaction</h3>
+        </header>
+        <div>
+          <div class="mb-2">
+            <label class="block mb-1">Title</label>
+            <input
+              type="text"
+              name="title"
+              placeholder="Enter title"
+              required
+            />
+          </div>
+          <div class="mb-2">
+            <label class="block mb-1">Date</label>
+            <input type="date" name="date" required />
+          </div>
+          <div class="mb-2">
+            <label class="block mb-1">Amount</label>
+            <input
+              type="number"
+              name="amount"
+              placeholder="Enter amount"
+              required
+            />
+          </div>
+          <div class="mb-2">
+            <label class="block mb-1">Type</label>
+            <select name="type" required>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+              <option value="transfer">Transfer</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="block mb-1">Category</label>
+            <select name="category" required>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Salary">Salary</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Transfer">Transfer</option>
+            </select>
+          </div>
+          <div>
+            <label>Description</label>
+            <textarea
+              name="description"
+              class="input w-100"
+              rows="3"
+              placeholder="Enter description"></textarea>
+          </div>
+        </div>
+        <footer>
+          <button
+            type="button"
+            commandfor="add-transaction-dialog"
+            command="close"
+            class="outline">Cancel</button
+          >
+          <button type="submit" class="btn primary">Add</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <div class="row mt-4">
+      <div class="card p-0">
+        <div
+          class="hstack justify-between p-2"
+          style="border-bottom: 1px solid var(--border); min-width: 800px;"
+        >
+          <h3>Transactions</h3>
+          <div class="hstack gap-2">
+            <button
+              id="sort-order"
+              class="outline small"
+              title="Toggle sort order"
+            >
+              <ArrowUp size={24} />
+            </button>
+            <ot-dropdown>
+              <button
+                id="sort-criteria-btn"
+                popovertarget="sort-menu"
+                class="outline small"
+              >
+                <Calendar size={24} />
+                Sort
+              </button>
+              <menu popover id="sort-menu">
+                <button role="menuitem" class="small" data-criteria="date"
+                  ><Calendar />Date</button
+                >
+                <button role="menuitem" class="small" data-criteria="amount"
+                  ><DollarSign />Amount</button
+                >
+              </menu>
+            </ot-dropdown>
+            <ot-dropdown>
+              <button popovertarget="category-menu" class="outline small">
+                <Funnel size={24} />
+                Category
+              </button>
+              <menu popover id="category-menu">
+                <button role="menuitem" class="small" data-category="all"
+                  >All</button
+                >
+                <button role="menuitem" class="small" data-category="Food"
+                  >Food</button
+                >
+                <button role="menuitem" class="small" data-category="Transport"
+                  >Transport</button
+                >
+                <button role="menuitem" class="small" data-category="Salary"
+                  >Salary</button
+                >
+                <button role="menuitem" class="small" data-category="Shopping"
+                  >Shopping</button
+                >
+                <button role="menuitem" class="small" data-category="Transfer"
+                  >Transfer</button
+                >
+              </menu>
+            </ot-dropdown>
+          </div>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="w-100" style="min-width: 800px;">
+            <thead>
+              <tr style="background: var(--surface-hover);">
+                <th class="p-3 text-left">Title</th>
+                <th class="p-3 text-left">Date</th>
+                <th class="p-3 text-left">Category</th>
+                <th class="p-3 text-left">Amount</th>
+                <th class="p-3 text-left">Type</th>
+                <th class="p-3 text-left">Description</th>
+                <th class="p-3 text-left"></th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body"> </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import Dexie, { type Table } from "dexie";
+    import { DUMMY_TRANSACTIONS } from "@/lib/constants";
+
+    // Transaction type definition
+    interface Transaction {
+      id?: number;
+      title: string;
+      date: Date;
+      amount: number;
+      type: "expense" | "income" | "transfer";
+      category: string;
+      description: string;
+    }
+
+    // Initialize Dexie database
+    const db = new Dexie("RiseBoxNotes");
+    db.version(2).stores({
+      transactions: "++id, title, date, amount, type, category",
+    });
+
+    // Get typed table
+    const transactionsTable: Table<Transaction> = db.transactions;
+
+    // State variables for transactions and filters
+    let transactions: Transaction[] = [];
+    let filteredTransactions: Transaction[] = [];
+    let sortOrder: "asc" | "desc" = "desc";
+    let sortCriteria: "date" | "amount" = "date";
+    let categoryFilter: string = "all";
+    let typeFilter: "income" | "expense" | null = null;
+    let dateFrom: Date | null = null;
+    let dateTo: Date | null = null;
+
+    /**
+     * Initialize the application
+     * Loads transactions from database, initializes date range,
+     * sets up event listeners, and renders the UI
+     */
+    async function init() {
+      const count = await transactionsTable.count();
+      // Load dummy data if database is empty
+      if (count === 0) {
+        for (const t of DUMMY_TRANSACTIONS) {
+          await transactionsTable.add(t);
+        }
+      }
+      await loadTransactions();
+      initDateRange();
+      setupEventListeners();
+      render();
+    }
+
+    /**
+     * Load all transactions from the database
+     */
+    async function loadTransactions() {
+      transactions = await transactionsTable.toArray();
+    }
+
+    /**
+     * Initialize the date range filter to last 30 days from today
+     */
+    function initDateRange() {
+      const today = new Date();
+      const thirtyDaysAgo = new Date(today);
+      thirtyDaysAgo.setDate(today.getDate() - 30);
+
+      document.getElementById("date-from").value = thirtyDaysAgo
+        .toISOString()
+        .split("T")[0];
+      document.getElementById("date-to").value = today
+        .toISOString()
+        .split("T")[0];
+
+      dateFrom = thirtyDaysAgo;
+      dateTo = today;
+    }
+
+    /**
+     * Set up all event listeners for user interactions
+     */
+    function setupEventListeners() {
+      // Handle form submission for adding new transactions
+      document
+        .getElementById("transaction-form")
+        .addEventListener("submit", handleAddTransaction);
+
+      // Toggle sort order between ascending and descending
+      document.getElementById("sort-order").addEventListener("click", () => {
+        sortOrder = sortOrder === "desc" ? "asc" : "desc";
+        document.getElementById("sort-order").innerHTML =
+          sortOrder === "desc"
+            ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="M11 12h4"/><path d="M11 16h7"/><path d="M11 20h10"/></svg>'
+            : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="M11 4h10"/><path d="M11 8h7"/><path d="M11 12h4"/></svg>';
+        render();
+      });
+
+      // Handle sort criteria selection (date or amount)
+      document.querySelectorAll("#sort-menu button").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const criteria = (e.target as HTMLElement).closest("button")?.dataset.criteria as "date" | "amount";
+          sortCriteria = criteria || "date";
+          document.getElementById("sort-criteria-btn").innerHTML =
+            sortCriteria === "date"
+              ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg> Sort'
+              : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Sort';
+          render();
+        });
+      });
+
+      // Handle category filter selection
+      document.querySelectorAll("#category-menu button").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          categoryFilter = (e.target as HTMLElement).closest("button")?.dataset.category || "all";
+          render();
+        });
+      });
+
+      // Handle start date filter change
+      document.getElementById("date-from").addEventListener("change", (e) => {
+        dateFrom = new Date(e.target.value);
+        render();
+      });
+
+      // Handle end date filter change
+      document.getElementById("date-to").addEventListener("change", (e) => {
+        dateTo = new Date(e.target.value);
+        render();
+      });
+
+      // Toggle income type filter
+      document.getElementById("income-filter").addEventListener("click", () => {
+        typeFilter = typeFilter === "income" ? null : "income";
+        document.getElementById("income-filter").style.color =
+          typeFilter === "income" ? "var(--primary)" : "";
+        document.getElementById("expense-filter").style.color = "";
+        render();
+      });
+
+      // Toggle expense type filter
+      document
+        .getElementById("expense-filter")
+        .addEventListener("click", () => {
+          typeFilter = typeFilter === "expense" ? null : "expense";
+          document.getElementById("expense-filter").style.color =
+            typeFilter === "expense" ? "var(--primary)" : "";
+          document.getElementById("income-filter").style.color = "";
+          render();
+        });
+
+      // Clear all filters button
+      document.getElementById("clear-filters").addEventListener("click", () => {
+        clearAllFilters();
+        render();
+      });
+
+      // Load dummy data button
+      document.getElementById("load-dummy").addEventListener("click", async () => {
+        for (const t of DUMMY_TRANSACTIONS) {
+          await db.transactions.add(t);
+        }
+        await loadTransactions();
+        render();
+      });
+
+      // Remove all transactions button
+      document.getElementById("remove-dummy").addEventListener("click", async () => {
+        await db.transactions.clear();
+        await loadTransactions();
+        render();
+      });
+    }
+
+    /**
+     * Handle form submission for adding a new transaction
+     * @param {Event} e - Form submit event
+     */
+    async function handleAddTransaction(e: Event) {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const formData = new FormData(form);
+
+      const type = formData.get("type") as "expense" | "income" | "transfer";
+      let amount = parseFloat(formData.get("amount") as string);
+      // Set amount sign based on type: expense is negative, income/transfer is positive
+      if (type === "expense") {
+        amount = -Math.abs(amount);
+      } else if (type === "income" || type === "transfer") {
+        amount = Math.abs(amount);
+      }
+
+      const transaction: Transaction = {
+        title: formData.get("title") as string,
+        date: new Date(formData.get("date") as string),
+        amount: amount,
+        type: type,
+        category: formData.get("category") as string,
+        description: (formData.get("description") as string) || "",
+      };
+
+      // Clear all filters before adding new transaction
+      clearAllFilters();
+      await transactionsTable.add(transaction);
+      form.reset();
+      initDateRange();
+      await loadTransactions();
+      render();
+
+      // Close the dialog
+      document
+        .querySelector("[commandfor='add-transaction-dialog'][command='close']")
+        ?.click();
+    }
+
+    /**
+     * Clear all active filters and reset to default values
+     */
+    function clearAllFilters() {
+      sortOrder = "desc";
+      sortCriteria = "date";
+      categoryFilter = "all";
+      typeFilter = null;
+      initDateRange();
+      
+      // Reset UI elements
+      document.getElementById("sort-order").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="M11 12h4"/><path d="M11 16h7"/><path d="M11 20h10"/></svg>';
+      document.getElementById("sort-criteria-btn").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg> Sort';
+      document.getElementById("income-filter").style.color = "";
+      document.getElementById("expense-filter").style.color = "";
+    }
+
+    /**
+     * Delete a transaction by ID
+     * @param {number} id - ID of the transaction to delete
+     */
+    async function deleteTransaction(id: number) {
+      await transactionsTable.delete(id);
+      await loadTransactions();
+      render();
+    }
+
+    /**
+     * Apply all active filters to the transactions list
+     * and sort based on current sort criteria and order
+     */
+    function applyFilters() {
+      filteredTransactions = transactions.filter((t) => {
+        // Filter by category
+        if (categoryFilter !== "all" && t.category !== categoryFilter)
+          return false;
+        // Filter by type (income/expense)
+        if (typeFilter && t.type !== typeFilter) return false;
+        // Filter by start date
+        if (dateFrom && new Date(t.date) < dateFrom) return false;
+        // Filter by end date
+        if (dateTo && new Date(t.date) > dateTo) return false;
+        return true;
+      });
+
+      // Sort filtered transactions
+      filteredTransactions.sort((a, b) => {
+        let valA, valB;
+        if (sortCriteria === "date") {
+          // Sort by date
+          valA = new Date(a.date).getTime();
+          valB = new Date(b.date).getTime();
+        } else {
+          // Sort by absolute amount value regardless of type
+          valA = Math.abs(a.amount);
+          valB = Math.abs(b.amount);
+        }
+        return sortOrder === "desc" ? valB - valA : valA - valB;
+      });
+    }
+
+    /**
+     * Update the summary cards (balance, income, expense)
+     * based on filtered transactions
+     */
+    function updateSummary() {
+      let balance = 0;
+      let income = 0;
+      let expense = 0;
+
+      filteredTransactions.forEach((t) => {
+        if (t.type === "income") {
+          income += t.amount;
+          balance += t.amount;
+        } else if (t.type === "expense") {
+          expense += Math.abs(t.amount);
+          balance += t.amount;
+        } else {
+          // Transfer type
+          balance += t.amount;
+        }
+      });
+
+      document.getElementById("balance-amount").textContent =
+        `$${balance.toFixed(2)}`;
+      document.getElementById("income-amount").textContent =
+        `$${income.toFixed(2)}`;
+      document.getElementById("expense-amount").textContent =
+        `$${expense.toFixed(2)}`;
+    }
+
+    /**
+     * Render the transactions table with filtered and sorted data
+     */
+    function renderTable() {
+      const tbody = document.getElementById("transactions-body");
+      tbody.innerHTML = filteredTransactions
+        .map(
+          (t) => `
+        <tr style="border-top: 1px solid var(--border);">
+          <td class="p-3">${t.title}</td>
+          <td class="p-3">${new Date(t.date).toLocaleDateString()}</td>
+          <td class="p-3">${t.category}</td>
+          <td class="p-3" style="color: ${t.type === "income" ? "var(--success)" : t.type === "expense" ? "var(--danger)" : "var(--text)"}">${t.type === "income" ? "+" : t.type === "expense" ? "-" : ""}$${Math.abs(t.amount).toFixed(2)}</td>
+          <td class="p-3">
+            <span class="badge ${t.type === "income" ? "success" : t.type === "expense" ? "danger" : ""}">
+              ${t.type.charAt(0).toUpperCase() + t.type.slice(1)}
+            </span>
+          </td>
+          <td class="p-3">
+            ${t.description ? `<span class="tooltip" data-tooltip="${t.description}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>` : "-"}
+          </td>
+          <td class="p-3">
+            <button class="ghost small" onclick="deleteTransaction(${t.id})" title="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            </button>
+          </td>
+        </tr>
+      `,
+        )
+        .join("");
+    }
+
+    /**
+     * Main render function that updates all UI components
+     */
+    function render() {
+      applyFilters();
+      updateSummary();
+      renderTable();
+    }
+
+    // Expose deleteTransaction to window for inline onclick handlers
+    window.deleteTransaction = deleteTransaction;
+
+    // Initialize the application on page load
+    init();
+  </script>
+
+  <style>
+    .tooltip {
+      position: relative;
+      cursor: pointer;
+      display: inline-flex;
+    }
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.2s,
+        visibility 0.2s;
+      z-index: 100;
+    }
+    .tooltip:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
+</Layout>

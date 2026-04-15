@@ -1,0 +1,185 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { Hexagon, Moon, Plus, Sun, MoreHorizontal, GripVertical } from "@lucide/astro";
+---
+
+<Layout title="Kanban" description="kanban">
+  <header>
+    <nav
+      class="p-2 hstack justify-between row"
+      style={{ borderBottom: "1px solid var(--border)" }}
+    >
+      <div class="col-10">
+        <nav class="hstack gap-2 col-10">
+          <a href="/" class="hstack gap-2" style={{ textDecoration: "none" }}>
+            <Hexagon size={16} />
+            <strong style={{ fontSize: "var(--text-xl)" }}>RiseBox</strong>
+          </a>
+          <p style={{ margin: "0 var(--space-2) 0 var(--space-2)" }}>|</p>
+          <span style="font-size: var(--text-lg); font-weight: 600;"
+            >Kanban Board</span
+          >
+        </nav>
+      </div>
+      <div class="col-2 hstack gap-2">
+        <button class="ghost small" onclick="toggleTheme()">
+          <Moon class="icon-light" size={16} />
+          <Sun class="icon-dark" size={16} />
+        </button>
+        <button class="primary small"><Plus size={16} /></button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="p-4 container">
+    <div class="hstack gap-4 align-start row">
+      <!-- To DO -->
+      <article class="card p-2 col-4">
+        <header class="hstack justify-between p-2">
+          <div class="hstack gap-2">
+            <span class="badge danger">3</span>
+            <strong>To Do</strong>
+          </div>
+          <button class="ghost small"><MoreHorizontal size={16} /></button>
+        </header>
+        <div class="vstack gap-2 p-2">
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge secondary">Feature</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">
+              Implement user authentication
+            </p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Add OAuth2 login with Google
+            </p>
+          </article>
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge warning">Bug</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">Fix navigation menu</p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Menu not closing on mobile
+            </p>
+          </article>
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge">Improvement</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">
+              Optimize database queries
+            </p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Reduce load time by 40%
+            </p>
+          </article>
+        </div>
+      </article>
+
+      <!-- In Progress -->
+      <article class="card col-4">
+        <header class="hstack justify-between p-2">
+          <div class="hstack gap-2">
+            <span class="badge warning">2</span>
+            <strong>In Progress</strong>
+          </div>
+          <button class="ghost small"><MoreHorizontal size={16} /></button>
+        </header>
+        <div class="vstack gap-2 p-2">
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge secondary">Feature</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">Design dashboard layout</p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Create responsive grid system
+            </p>
+          </article>
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge success">Research</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">API integration research</p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Evaluate third-party services
+            </p>
+          </article>
+        </div>
+      </article>
+
+      <!-- Done -->
+      <article class="card col-4">
+        <header class="hstack justify-between p-2">
+          <div class="hstack gap-2">
+            <span class="badge success">2</span>
+            <strong>Done</strong>
+          </div>
+          <button class="ghost small"><MoreHorizontal size={16} /></button>
+        </header>
+        <div class="vstack gap-2 p-2">
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge secondary">Feature</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">Setup project repository</p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Initialize Git and CI/CD
+            </p>
+          </article>
+          <article class="card">
+            <header class="hstack gap-2 mb-2">
+              <GripVertical size={14} />
+              <span class="badge">Documentation</span>
+            </header>
+            <p style="margin: 0; font-weight: 500;">Write README</p>
+            <p
+              class="text-lighter"
+              style="margin: var(--space-1) 0 0 0; font-size: var(--text-sm);"
+            >
+              Project setup instructions
+            </p>
+          </article>
+        </div>
+      </article>
+
+      <!-- <button class="outline p-3 hstack gap-2 kanban-add-column">
+        <Plus size={16} />
+        <span>Add Column</span>
+      </button> -->
+    </div>
+  </main>
+</Layout>
+
+<style>
+  article.card {
+    cursor: grab;
+  }
+  article.card:hover {
+    border-color: var(--primary);
+  }
+</style>

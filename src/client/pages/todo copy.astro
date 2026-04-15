@@ -1,0 +1,29 @@
+---
+import DashboardNav from "@/components/UI/DashboardNav.astro";
+import Layout from "@/layouts/Layout.astro";
+import Todo from "@/components/Tools/Todo.vue";
+---
+
+<Layout title="Todo" description="todo">
+  <header>
+    <DashboardNav />
+  </header>
+
+  <main
+    class="p-2 container h-100"
+    style="border-left: 1px solid var(--border); border-right: 1px solid var(--border); "
+  >
+    <Todo client:load />
+  </main>
+</Layout>
+
+<style>
+  input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+</style>

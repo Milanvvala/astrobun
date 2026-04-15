@@ -1,0 +1,262 @@
+---
+// Import Layout and icons from lucide-astro
+import Layout from "@/layouts/Layout.astro";
+import { CirclePause, Clock2, Download, Hexagon, Moon, Pause, Play, RotateCcw, Sun, Timer } from "@lucide/astro";
+---
+
+<Layout title="Pomodoro" description="pomodoro">
+  <!-- Header with navigation bar -->
+  <header>
+    <nav
+      class="p-2 hstack justify-between row"
+      style={{ borderBottom: "1px solid var(--border)" }}
+    >
+      <div class="col-10">
+        <nav class="hstack gap-2 col-10">
+          <!-- Brand logo linking to home -->
+          <a href="/" class="hstack gap-2" style={{ textDecoration: "none" }}>
+            <Hexagon size={16} />
+            <strong style={{ fontSize: "var(--text-xl)" }}>RiseBox</strong>
+          </a>
+          <p style={{ margin: "0 var(--space-2) 0 var(--space-2)" }}>|</p>
+          <!-- Dropdown for options -->
+          <ot-dropdown>
+            <button popovertarget="demo-menu" class="outline small">
+              <Timer size={16} />
+              Options
+            </button>
+            <menu popover id="demo-menu">
+              <button role="menuitem" class="small"
+                ><Download size={16} />Profile</button
+              >
+              <button role="menuitem" class="small"
+                ><Download size={16} />Profile</button
+              >
+            </menu>
+          </ot-dropdown>
+        </nav>
+      </div>
+      <!-- Theme toggle and add button -->
+      <div class="col-2 hstack gap-2">
+        <button class="ghost small" onclick="toggleTheme()">
+          <Moon class="icon-light" size={16} />
+          <Sun class="icon-dark" size={16} />
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main content area with timer -->
+  <main class="container p-4">
+    <div class="row">
+      <div class="col-12" style="max-width: 400px; margin: 40px auto">
+        <!-- Oat UI Tabs for switching between timer modes -->
+        <ot-tabs>
+          <div role="tablist">
+            <button role="tab" aria-selected="true" id="tab-work">
+              <Timer size={16} />Pomodoro
+            </button>
+            <button role="tab" id="tab-short">
+              <Clock2 size={16} />Short Break
+            </button>
+            <button role="tab" id="tab-long">
+              <CirclePause size={16} />Long Break
+            </button>
+          </div>
+
+          <!-- Timer panels -->
+          <div role="tabpanel" id="panel-work">
+            <article class="card">
+              <header class="text-center">
+                <h3>Pomodoro</h3>
+              </header>
+              <div class="text-center p-4">
+                <div id="work-display" style="font-size: 4rem; font-weight: 300; font-family: monospace">25:00</div>
+                <progress id="work-progress" value="0" max="100" class="mt-4 w-100"></progress>
+              </div>
+              <footer class="hstack gap-2 justify-center p-3">
+                <button id="work-start-btn" class="primary" onclick="startTimer('work')">
+                  <Play size={18} /> Start
+                </button>
+                <button id="work-pause-btn" class="outline" onclick="pauseTimer('work')" style="display: none">
+                  <Pause size={18} /> Pause
+                </button>
+                <button class="ghost" onclick="resetTimer('work')">
+                  <RotateCcw size={18} />
+                </button>
+              </footer>
+            </article>
+          </div>
+
+          <div role="tabpanel" id="panel-short" >
+            <article class="card">
+              <header class="text-center">
+                <h3>Short Break</h3>
+              </header>
+              <div class="text-center p-4">
+                <div id="short-display" style="font-size: 4rem; font-weight: 300; font-family: monospace">05:00</div>
+                <progress id="short-progress" value="0" max="100" class="mt-4 w-100"></progress>
+              </div>
+              <footer class="hstack gap-2 justify-center p-3">
+                <button id="short-start-btn" class="primary" onclick="startTimer('short')">
+                  <Play size={18} /> Start
+                </button>
+                <button id="short-pause-btn" class="outline" onclick="pauseTimer('short')" style="display: none">
+                  <Pause size={18} /> Pause
+                </button>
+                <button class="ghost" onclick="resetTimer('short')">
+                  <RotateCcw size={18} />
+                </button>
+              </footer>
+            </article>
+          </div>
+
+          <div role="tabpanel" id="panel-long">
+            <article class="card">
+              <header class="text-center">
+                <h3>Long Break</h3>
+              </header>
+              <div class="text-center p-4">
+                <div id="long-display" style="font-size: 4rem; font-weight: 300; font-family: monospace">15:00</div>
+                <progress id="long-progress" value="0" max="100" class="mt-4 w-100"></progress>
+              </div>
+              <footer class="hstack gap-2 justify-center p-3">
+                <button id="long-start-btn" class="primary" onclick="startTimer('long')">
+                  <Play size={18} /> Start
+                </button>
+                <button id="long-pause-btn" class="outline" onclick="pauseTimer('long')" style="display: none">
+                  <Pause size={18} /> Pause
+                </button>
+                <button class="ghost" onclick="resetTimer('long')">
+                  <RotateCcw size={18} />
+                </button>
+              </footer>
+            </article>
+          </div>
+        </ot-tabs>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // Timer state variables
+  let timer: any = null;
+  let timeLeft = 25 * 60;
+  let totalTime = 25 * 60;
+  let isRunning = false;
+  let currentMode = "work";
+
+  // Timer durations for each mode (in seconds)
+  const durations: Record<string, number> = {
+    work: 25 * 60,
+    short: 5 * 60,
+    long: 15 * 60,
+  };
+
+  // Format seconds into MM:SS format
+  function formatTime(seconds: number): string {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  }
+
+  // Update timer display and progress bar
+  function updateDisplay() {
+    const display = document.getElementById(currentMode + "-display");
+    const progress = document.getElementById(currentMode + "-progress");
+    if (display) display.textContent = formatTime(timeLeft);
+    if (progress) progress.value = ((totalTime - timeLeft) / totalTime) * 100;
+  }
+
+  // Switch between tabs
+  window.switchTab = function(mode: string) {
+    // Hide all panels
+    document.getElementById("panel-work")!.style.display = "none";
+    document.getElementById("panel-short")!.style.display = "none";
+    document.getElementById("panel-long")!.style.display = "none";
+    
+    // Show selected panel
+    document.getElementById("panel-" + mode)!.style.display = "block";
+    
+    // Update state
+    currentMode = mode;
+    timeLeft = durations[mode];
+    totalTime = durations[mode];
+    updateDisplay();
+  };
+
+  // Make functions globally available for onclick handlers
+  window.startTimer = function(mode?: string) {
+    if (mode) currentMode = mode;
+    if (isRunning) return;
+    isRunning = true;
+    const startBtn = document.getElementById(currentMode + "-start-btn") as HTMLButtonElement;
+    const pauseBtn = document.getElementById(currentMode + "-pause-btn") as HTMLButtonElement;
+    if (startBtn) startBtn.style.display = "none";
+    if (pauseBtn) pauseBtn.style.display = "inline-flex";
+
+    timer = setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft--;
+        updateDisplay();
+      } else {
+        clearInterval(timer);
+        isRunning = false;
+        const sBtn = document.getElementById(currentMode + "-start-btn") as HTMLButtonElement;
+        const pBtn = document.getElementById(currentMode + "-pause-btn") as HTMLButtonElement;
+        if (sBtn) sBtn.style.display = "inline-flex";
+        if (pBtn) pBtn.style.display = "none";
+      }
+    }, 1000);
+  };
+
+  window.pauseTimer = function(mode?: string) {
+    if (mode) currentMode = mode;
+    clearInterval(timer);
+    isRunning = false;
+    const startBtn = document.getElementById(currentMode + "-start-btn") as HTMLButtonElement;
+    const pauseBtn = document.getElementById(currentMode + "-pause-btn") as HTMLButtonElement;
+    if (startBtn) startBtn.style.display = "inline-flex";
+    if (pauseBtn) pauseBtn.style.display = "none";
+  };
+
+  window.resetTimer = function(mode?: string) {
+    if (mode) currentMode = mode;
+    pauseTimer(mode);
+    timeLeft = durations[currentMode];
+    totalTime = durations[currentMode];
+    updateDisplay();
+  };
+
+  // Initialize display on page load
+  updateDisplay();
+
+  // Handle Oat UI tabs click events
+  document.querySelector('[role="tablist"]')?.addEventListener('click', (e: Event) => {
+    const btn = (e.target as HTMLElement).closest('[role="tab"]') as HTMLElement;
+    if (!btn) return;
+    const id = btn.id;
+    if (id === 'tab-work') { currentMode = 'work'; timeLeft = 25*60; totalTime = 25*60; }
+    else if (id === 'tab-short') { currentMode = 'short'; timeLeft = 5*60; totalTime = 5*60; }
+    else if (id === 'tab-long') { currentMode = 'long'; timeLeft = 15*60; totalTime = 15*60; }
+    updateDisplay();
+  });
+</script>
+
+<!-- Custom styles -->
+<style>
+  /* Center text alignment */
+  .text-center {
+    text-align: center;
+  }
+  /* Progress bar height */
+  progress {
+    height: 8px;
+  }
+  /* Active tab styling */
+  [role="tab"][aria-selected="true"] {
+    background: var(--primary);
+    color: white;
+  }
+</style>

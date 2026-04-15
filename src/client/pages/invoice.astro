@@ -1,0 +1,421 @@
+---
+import DashboardNav from "@/components/UI/DashboardNav.astro";
+import Layout from "@/layouts/Layout.astro";
+import { FileText, Filter, Hexagon, Moon, Plus, Printer, Sun } from "@lucide/astro";
+---
+
+<Layout title="Invoice" description="invoice">
+  <!-- Navbar -->
+  <header>
+    <DashboardNav />
+  </header>
+
+  <!-- Main Content with Tabs -->
+  <main
+    class="p-2 container"
+    style="border-left: 1px solid var(--border); border-right: 1px solid var(--border);"
+  >
+    <ot-tabs>
+      <!-- Tab List -->
+      <div role="tablist">
+        <button role="tab" aria-selected="true" id="tab-form">Form</button>
+        <button role="tab" id="tab-preview">Preview</button>
+      </div>
+
+      <!-- Form Tab -->
+      <div role="tabpanel" id="panel-form">
+        <form>
+          <!-- Invoice Details Card -->
+          <article class="card p-4 mb-4">
+            <h3>Invoice Details</h3>
+            <div class="row">
+              <label data-field class="col-3">
+                Invoice Number
+                <input type="text" value="INV-001" />
+              </label>
+              <label data-field class="col-3">
+                Date
+                <input type="date" value="2026-01-16" />
+              </label>
+              <label data-field class="col-3">
+                PO Number
+                <input type="text" value="PO-2026-001" />
+              </label>
+              <label data-field class="col-3">
+                Due Date
+                <input type="date" value="2026-01-25" />
+              </label>
+            </div>
+          </article>
+
+          <!-- Company Details Card -->
+          <article class="card p-4 mb-4">
+            <h3>Company Details</h3>
+            <div class="row">
+              <label data-field class="col-3">
+                Company Name
+                <input type="text" value="JayTech Engineering" />
+              </label>
+              <label data-field class="col-3">
+                Address Line 1
+                <input type="text" value="Ahmedabad, India" />
+              </label>
+              <label data-field class="col-3">
+                Address Line 2
+                <input type="text" value="" />
+              </label>
+              <label data-field class="col-3">
+                Phone
+                <input type="tel" value="" />
+              </label>
+              <label data-field class="col-3">
+                GSTIN
+                <input type="text" value="24XXXXXXXXX" />
+              </label>
+              <label data-field class="col-3">
+                Email
+                <input type="email" value="support@jaytech.com" />
+              </label>
+            </div>
+          </article>
+
+          <!-- Bill To and Ship To Cards -->
+          <div class="row mb-4">
+            <!-- Bill To Card -->
+            <article class="card p-4 col-6">
+              <h3>Bill To</h3>
+              <div class="row">
+                <label data-field class="col-6">
+                  Client Name
+                  <input type="text" value="Client Name" />
+                </label>
+                <label data-field class="col-6">
+                  Company
+                  <input type="text" value="Client Company" />
+                </label>
+                <label data-field class="col-6">
+                  Address Line 1
+                  <input type="text" value="123 Client Address" />
+                </label>
+                <label data-field class="col-6">
+                  Address Line 2
+                  <input type="text" value="City, State - 123456" />
+                </label>
+                <label data-field class="col-6">
+                  Phone
+                  <input type="tel" value="" />
+                </label>
+                <label data-field class="col-6">
+                  Email
+                  <input type="email" value="client@email.com" />
+                </label>
+              </div>
+            </article>
+
+            <!-- Ship To Card -->
+            <article class="card p-4 col-6">
+              <h3>Ship To</h3>
+              <div class="row">
+                <label data-field class="col-6">
+                  Client Name
+                  <input type="text" value="Client Name" />
+                </label>
+                <label data-field class="col-6">
+                  Address Line 1
+                  <input type="text" value="Shipping Address" />
+                </label>
+                <label data-field class="col-6">
+                  Address Line 2
+                  <input type="text" value="Warehouse Location, City, State - 123456" />
+                </label>
+                <label data-field class="col-6">
+                  Phone
+                  <input type="tel" value="" />
+                </label>
+                <label data-field class="col-6">
+                  Reference No
+                  <input type="text" value="REF-001" />
+                </label>
+                <label data-field class="col-6">
+                  Project Code
+                  <input type="text" value="PRJ-2026" />
+                </label>
+              </div>
+            </article>
+          </div>
+
+          <!-- Items Card -->
+          <article class="card p-4 mb-4">
+            <h3>Items</h3>
+            <table class="w-100">
+              <thead>
+                <tr style="background: var(--surface-hover);">
+                  <th class="p-2 text-left">Description</th>
+                  <th class="p-2 text-left" style="width: 80px;">Qty</th>
+                  <th class="p-2 text-left" style="width: 120px;">Rate</th>
+                  <th class="p-2 text-left" style="width: 120px;">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="p-2">
+                    <label data-field>
+                      Description
+                      <input type="text" value="Electrical Control Panel" />
+                    </label>
+                  </td>
+                  <td class="p-2">
+                    <label data-field>
+                      Qty
+                      <input type="number" value="1" />
+                    </label>
+                  </td>
+                  <td class="p-2">
+                    <label data-field>
+                      Rate
+                      <input type="text" value="₹25,000" />
+                    </label>
+                  </td>
+                  <td class="p-2">
+                    <label data-field>
+                      Amount
+                      <input type="text" value="₹25,000" />
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-2">
+                    <label data-field>
+                      Description
+                      <input type="text" value="Installation Charges" />
+                    </label>
+                  </td>
+                  <td class="p-2">
+                    <label data-field>
+                      Qty
+                      <input type="number" value="1" />
+                    </label>
+                  </td>
+                  <td class="p-2">
+                    <label data-field>
+                      Rate
+                      <input type="text" value="₹5,000" />
+                    </label>
+                  </td>
+                  <td class="p-2">
+                    <label data-field>
+                      Amount
+                      <input type="text" value="₹5,000" />
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <!-- Bank Details and Totals Cards -->
+          <div class="row mb-4">
+            <!-- Bank Details Card -->
+            <article class="card p-4 col-6">
+              <h3>Bank Details</h3>
+              <div class="row">
+                <label data-field class="col-6">
+                  Bank Name
+                  <input type="text" value="HDFC Bank" />
+                </label>
+                <label data-field class="col-6">
+                  Account Number
+                  <input type="text" value="1234567890" />
+                </label>
+                <label data-field class="col-6">
+                  IFSC Code
+                  <input type="text" value="HDFC0001234" />
+                </label>
+                <label data-field class="col-6">
+                  Branch
+                  <input type="text" value="Ahmedabad Main" />
+                </label>
+              </div>
+            </article>
+
+            <!-- Totals Card -->
+            <article class="card p-4 col-6">
+              <h3>Totals</h3>
+              <div class="row">
+                <label data-field class="col-12">
+                  GST (%)
+                  <input type="number" value="18" />
+                </label>
+                <label data-field class="col-12">
+                  GST Amount
+                  <input type="text" value="₹5,400" />
+                </label>
+              </div>
+            </article>
+          </div>
+
+          <!-- Terms & Conditions Card -->
+          <article class="card p-4 mb-4">
+            <h3>Terms & Conditions</h3>
+            <label data-field class="col-12">
+              Terms & Conditions
+              <textarea rows="5">1. Payment is due within 15 days of invoice date.
+2. Goods once sold cannot be returned.
+3. Subject to Ahmedabad jurisdiction.</textarea>
+            </label>
+          </article>
+
+          <!-- Form Actions -->
+          <div class="hstack gap-2 justify-end">
+            <button type="button" class="outline">Cancel</button>
+            <button type="submit" class="btn primary">Save Invoice</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Preview Tab - Invoice Design -->
+      <div role="tabpanel" id="panel-preview">
+        <article class="card p-4" style="max-width: 800px; margin: auto;">
+          <!-- Invoice Header -->
+          <header
+            class="hstack justify-between items-start p-2"
+            style="border-bottom: 2px solid var(--primary);"
+          >
+            <div class="hstack gap-3">
+              <img
+                src="/logo.svg"
+                alt="Logo"
+                style="height: 48px; width: auto;"
+              />
+            </div>
+            <div style="text-align: right; color: var(--text-light);">
+              <h4>JayTech Engineering</h4>
+              <p>
+                Ahmedabad, India<br />
+                GSTIN: 24XXXXXXXXX<br />
+                support@jaytech.com
+              </p>
+            </div>
+          </header>
+
+          <!-- Bill To, Ship To, Invoice Details -->
+          <section class="row mt-2" style="gap: 1rem;">
+            <div class="col-4">
+              <h5>Bill To</h5>
+              <p style="color: var(--muted-foreground);">
+                Client Name<br />
+                Client Company<br />
+                123 Client Address<br />
+                City, State - 123456<br />
+                Phone: -<br />
+                client@email.com
+              </p>
+            </div>
+            <div class="col-4">
+              <h5>Ship To</h5>
+              <p style="color: var(--muted-foreground);">
+                Client Name<br />
+                Shipping Address<br />
+                Warehouse Location<br />
+                City, State - 123456<br />
+                Phone: -
+              </p>
+            </div>
+            <div class="col-4">
+              <h5 style="color: var(--primary);">INVOICE</h5>
+              <p>
+                <strong>Invoice #:</strong> INV-001<br />
+                <strong>Date:</strong> 16 Jan 2026<br />
+                <strong>PO Number:</strong> PO-2026-001<br />
+                <strong>Due Date:</strong> 25 Jan 2026
+              </p>
+            </div>
+          </section>
+
+          <!-- Items Table -->
+          <section class="card p-2 mt-2">
+            <table class="w-100">
+              <thead>
+                <tr style="background: var(--secondary); color: white;">
+                  <th class="p-2 text-left">Description</th>
+                  <th class="p-2 text-left">Qty</th>
+                  <th class="p-2 text-left">Rate</th>
+                  <th class="p-2 text-left">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top: 1px solid var(--border);">
+                  <td class="p-2">Electrical Control Panel</td>
+                  <td class="p-2">1</td>
+                  <td class="p-2">₹25,000</td>
+                  <td class="p-2">₹25,000</td>
+                </tr>
+                <tr style="border-top: 1px solid var(--border);">
+                  <td class="p-2">Installation Charges</td>
+                  <td class="p-2">1</td>
+                  <td class="p-2">₹5,000</td>
+                  <td class="p-2">₹5,000</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Bank Details and Totals -->
+          <section class="row mt-2">
+            <div class="card p-2 col-8">
+              <h5>Bank Details</h5>
+              <p style="font-size: var(--text-sm);">
+                Bank Name: HDFC Bank<br />
+                Account No: 1234567890<br />
+                IFSC Code: HDFC0001234<br />
+                Branch: Ahmedabad Main
+              </p>
+            </div>
+            <div
+              class="card p-2 col-4"
+              style="background: var(--surface-hover);"
+            >
+              <table class="w-100">
+                <tbody>
+                  <tr>
+                    <td class="p-2">Subtotal</td>
+                    <td class="p-2" style="text-align: right;">₹30,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2">GST (18%)</td>
+                    <td class="p-2" style="text-align: right;">₹5,400</td>
+                  </tr>
+                  <tr style="background: var(--primary); color: white;">
+                    <td class="p-2"><strong>Total</strong></td>
+                    <td class="p-2" style="text-align: right;"
+                      ><strong>₹35,400</strong></td
+                    >
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Terms & Conditions -->
+          <section class="mt-2">
+            <h5>Terms & Conditions</h5>
+            <p>
+              1. Payment is due within 15 days of invoice date.<br />
+              2. Goods once sold cannot be returned.<br />
+              3. Subject to Ahmedabad jurisdiction.
+            </p>
+          </section>
+          <hr class="mt-2 mb-2" />
+
+          <!-- Footer -->
+          <footer class="text-center">
+            <p>
+              Thank you for your business.<br />
+              This is a computer-generated invoice.
+            </p>
+          </footer>
+        </article>
+      </div>
+    </ot-tabs>
+  </main>
+</Layout>

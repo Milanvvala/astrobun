@@ -1,0 +1,22 @@
+---
+import Welcome from "@/components/Welcome.astro";
+import Layout from "@/layouts/Layout.astro";
+import Navbar from "@/components/UI/Navbar.astro";
+import Footer from "@/components/UI/Footer.astro";
+import Test from "@/components/Test.vue";
+---
+
+<Layout title="home" description="home">
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      height: "100dvh",
+    }}
+  >
+    <Navbar />
+    <span style={{ flex: 1 }}><Welcome /></span>
+    <Test client:load />
+    <Footer />
+  </div>
+</Layout>

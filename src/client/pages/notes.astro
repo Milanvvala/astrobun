@@ -1,0 +1,224 @@
+---
+import DashboardNav from "@/components/UI/DashboardNav.astro";
+import Layout from "@/layouts/Layout.astro";
+import FullScreenMode from "@/components/FullScreenMode.astro";
+import FloatingWindowMode from "@/components/FloatingWindowMode.astro";
+import NavbarToggle from "@/components/NavbarToggle.astro";
+import { Copy, Download, Plus, Trash2 } from "@lucide/astro";
+---
+
+<Layout title="Notes" description="notes">
+  <div id="dashboard-header"><DashboardNav /></div>
+  <main
+    class="p-4 container h-100"
+    style="border-left: 1px solid var(--border); border-right: 1px solid var(--border);"
+  >
+    <div
+      class="p-2 hstack gap-3"
+      style="border-bottom: 1px solid var(--border)"
+    >
+      <select
+        id="notes-dropdown"
+        class="form-select"
+        style="width: 200px; flex-shrink: 0;"
+      >
+        <option value="">Select a note...</option>
+      </select>
+      <button id="add-note-btn" class="ghost" title="Add Note">
+        <Plus size={16} />
+      </button>
+      <input
+        id="note-title"
+        type="text"
+        placeholder="Note title"
+        class="w-100"
+        style="border:none; font-size:var(--text-lg); font-weight:600; flex:1"
+      />
+      <div class="hstack gap-2">
+        <NavbarToggle mode="show" />
+        <button id="copy-btn" class="ghost" title="Copy Note to Clipboard"
+          ><Copy size={16} /></button
+        >
+        <button id="download-btn" class="ghost" title="Download Note"
+          ><Download size={16} /></button
+        >
+        <FloatingWindowMode />
+        <FullScreenMode />
+        <button
+          id="delete-btn"
+          class="ghost"
+          data-variant="danger"
+          title="Delete Note"><Trash2 size={16} /></button
+        >
+      </div>
+    </div>
+    <textarea
+      id="note-content"
+      class="w-100"
+      style="border:none; line-height: 1.8; font-size: var(--text-base); resize: none;"
+      placeholder="Start writing your note..."></textarea>
+  </main>
+</Layout>
+
+<script>
+  import {
+    getAllNotes,
+    saveNote,
+    deleteNote,
+    getMostRecentNote,
+    sanitizeFilename,
+    type Note,
+  } from "@/lib/db";
+
+  // Current state
+  let currentNote: Note | null = null;
+  let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+  let notesList: Note[] = [];
+
+  // DOM elements
+  const dropdown = document.getElementById(
+    "notes-dropdown",
+  ) as HTMLSelectElement;
+  const addNoteBtn = document.getElementById(
+    "add-note-btn",
+  ) as HTMLButtonElement;
+  const titleInput = document.getElementById("note-title") as HTMLInputElement;
+  const contentInput = document.getElementById(
+    "note-content",
+  ) as HTMLTextAreaElement;
+  const copyBtn = document.getElementById("copy-btn") as HTMLButtonElement;
+  const downloadBtn = document.getElementById(
+    "download-btn",
+  ) as HTMLButtonElement;
+  const deleteBtn = document.getElementById("delete-btn") as HTMLButtonElement;
+
+  // Truncate long titles for dropdown display
+  function truncate(str: string, len: number): string {
+    return str.length > len ? str.slice(0, len) + "..." : str;
+  }
+
+  // Refresh the notes dropdown with current notes list
+  async function refreshDropdown() {
+    const currentId = currentNote?.id;
+    notesList = await getAllNotes();
+    dropdown.innerHTML = '<option value="">Select a note...</option>';
+    for (const note of notesList) {
+      const title = note.title || "Untitled";
+      const option = document.createElement("option");
+      option.value = String(note.id);
+      option.textContent = truncate(title, 20);
+      dropdown.appendChild(option);
+    }
+    if (currentId) {
+      dropdown.value = String(currentId);
+    }
+  }
+
+  // Load a note into the editor
+  async function loadNote(note: Note | null) {
+    currentNote = note;
+    if (note) {
+      titleInput.value = note.title;
+      contentInput.value = note.content;
+      dropdown.value = String(note.id);
+    } else {
+      titleInput.value = "";
+      contentInput.value = "";
+      dropdown.value = "";
+    }
+  }
+
+  // Save the current note to database
+  async function saveCurrentNote() {
+    if (!currentNote) return;
+    currentNote.title = titleInput.value;
+    currentNote.content = contentInput.value;
+    await saveNote(currentNote);
+    await refreshDropdown();
+  }
+
+  // Debounced save - waits 500ms after typing stops
+  function debouncedSave() {
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveCurrentNote, 500);
+  }
+
+  // Create a new note
+  async function handleAddNote() {
+    const newNote: Note = {
+      title: "",
+      content: "",
+      updatedAt: new Date(),
+    };
+    const id = await saveNote(newNote);
+    newNote.id = id;
+    await refreshDropdown();
+    await loadNote(newNote);
+    titleInput.focus();
+  }
+
+  // Delete the current note
+  async function handleDelete() {
+    if (!currentNote?.id) return;
+    await deleteNote(currentNote.id);
+    const recent = await getMostRecentNote();
+    await loadNote(recent || null);
+    await refreshDropdown();
+  }
+
+  // Copy note content to clipboard
+  function handleCopy() {
+    if (!contentInput.value) return;
+    navigator.clipboard.writeText(contentInput.value);
+  }
+
+  // Download note as a text file
+  function handleDownload() {
+    const title = titleInput.value || "untitled";
+    const filename = `${sanitizeFilename(title)}.txt`;
+    const blob = new Blob([contentInput.value], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Event: when user selects a note from dropdown
+  dropdown.addEventListener("change", async () => {
+    const id = Number(dropdown.value);
+    if (id) {
+      const note = notesList.find((n) => n.id === id);
+      if (note) await loadNote(note);
+    } else {
+      await loadNote(null);
+    }
+  });
+
+  // Attach event listeners to buttons
+  addNoteBtn.addEventListener("click", handleAddNote);
+  titleInput.addEventListener("input", debouncedSave);
+  contentInput.addEventListener("input", debouncedSave);
+  copyBtn.addEventListener("click", handleCopy);
+  downloadBtn.addEventListener("click", handleDownload);
+  deleteBtn.addEventListener("click", handleDelete);
+
+  // Initialize - load most recent note
+  async function init() {
+    const recent = await getMostRecentNote();
+    await refreshDropdown();
+    await loadNote(recent || null);
+  }
+
+  init();
+</script>
+
+<style>
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+</style>

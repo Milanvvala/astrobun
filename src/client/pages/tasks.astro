@@ -1,0 +1,335 @@
+---
+import DashboardNav from "@/components/UI/DashboardNav.astro";
+import Layout from "@/layouts/Layout.astro";
+import { BrushCleaning, CirclePlus } from "@lucide/astro";
+---
+
+<Layout title="Todo" description="todo">
+  <header>
+    <DashboardNav />
+  </header>
+
+  <main
+    class="p-4 container h-100"
+    style="border-left: 1px solid var(--border); border-right: 1px solid var(--border); "
+  >
+    <div
+      class="p-2 hstack gap-3"
+      style="border-bottom: 1px solid var(--border)"
+    >
+      <input
+        type="text"
+        id="task-input"
+        placeholder="Add a task..."
+        class="w-100"
+        style="border:none; font-size:var(--text-lg); font-weight:600; flex:1"
+      />
+      <div class="hstack gap-2">
+        <button class="outline" data-variant="secondary" id="add-task-btn"
+          ><CirclePlus size={24} /></button
+        >
+        <button
+          class="outline col-1 primary"
+          id="clean-list-btn"
+          data-variant="danger"
+        >
+          <BrushCleaning size={24} stroke-width={2} />
+        </button>
+      </div>
+    </div>
+    <div class="p-4 vstack" id="todo-list"></div>
+  </main>
+</Layout>
+
+<script>
+  import {
+    getAllTodos,
+    createTodo,
+    saveTodo,
+    deleteTodo,
+    updateTodoOrders,
+  } from "@/lib/db";
+
+  /** @typedef {{ id?: number; title: string; completed: boolean; pinned: boolean; order: number; createdAt: Date }} Todo */
+
+  /** @type {Todo[]} */
+  let todos = [];
+
+  /** @type {Todo | null} */
+  let draggedItem = null;
+
+  async function loadTodos() {
+    todos = await getAllTodos();
+
+    if (todos.length === 0) {
+      const dummyTasks = [
+        { title: "Welcome to Todo!", completed: false, pinned: true, order: 0 },
+        {
+          title: "Click the + button to add a task",
+          completed: false,
+          pinned: false,
+          order: 1,
+        },
+        {
+          title: "Click the pin to pin a task at top",
+          completed: false,
+          pinned: false,
+          order: 2,
+        },
+        {
+          title: "Click the checkmark to complete a task",
+          completed: false,
+          pinned: false,
+          order: 3,
+        },
+        {
+          title: "Drag the handle to reorder tasks",
+          completed: false,
+          pinned: false,
+          order: 4,
+        },
+        {
+          title: "Click the trash to delete a task",
+          completed: false,
+          pinned: false,
+          order: 5,
+        },
+        {
+          title: "Click the brush to clean completed tasks",
+          completed: false,
+          pinned: false,
+          order: 6,
+        },
+      ];
+
+      for (const task of dummyTasks) {
+        await createTodo({ ...task, createdAt: new Date() });
+      }
+      todos = await getAllTodos();
+    }
+
+    renderTodos();
+  }
+
+  function renderTodos() {
+    const container = document.getElementById("todo-list");
+    if (!container) return;
+
+    container.innerHTML = todos
+      .map(
+        (todo) => `
+      <div class="card row p-2" data-id="${todo.id}" draggable="true"  ot-animate="hover:zoom-in">
+        <button class="ghost col-1 drag-handle" data-variant="secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+        </button>
+        <button class="ghost col-1 ${todo.completed ? "primary" : ""}" data-action="toggle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </button>
+        <span class="col-8 flex items-center task-text ${todo.completed ? "completed" : ""}" 
+              data-action="edit" 
+              style="text-decoration: ${todo.completed ? "line-through" : "none"}; opacity: ${todo.completed ? "0.5" : "1"}">
+          ${todo.title}
+        </span>
+        <button class="ghost col-1 ${todo.pinned ? "primary" : ""}" data-variant="secondary" data-action="pin">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="17" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>
+        </button>
+        <button class="ghost col-1" data-variant="danger" data-action="delete">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+        </button>
+      </div>
+    `,
+      )
+      .join("");
+
+    initDragAndDrop();
+  }
+
+  function initDragAndDrop() {
+    const container = document.getElementById("todo-list");
+    if (!container) return;
+
+    const cards = container.querySelectorAll(".card");
+    cards.forEach((card) => {
+      card.addEventListener("dragstart", (e) => {
+        draggedItem = todos.find(
+          (t) => t.id === parseInt(card.getAttribute("data-id") || "0"),
+        );
+        card.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      card.addEventListener("dragend", () => {
+        card.classList.remove("dragging");
+        draggedItem = null;
+      });
+
+      card.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      });
+
+      card.addEventListener("drop", async (e) => {
+        e.preventDefault();
+        if (!draggedItem) return;
+
+        const targetId = parseInt(card.getAttribute("data-id") || "0");
+        const targetIndex = todos.findIndex((t) => t.id === targetId);
+        const draggedIndex = todos.findIndex((t) => t.id === draggedItem.id);
+
+        if (targetIndex === -1 || draggedIndex === -1) return;
+
+        const [removed] = todos.splice(draggedIndex, 1);
+        todos.splice(targetIndex, 0, removed);
+
+        todos.forEach((t, i) => (t.order = i));
+        await updateTodoOrders(todos);
+
+        renderTodos();
+      });
+    });
+  }
+
+  async function addTask() {
+    const input = document.getElementById("task-input");
+    const title = input?.value?.trim() || "";
+    if (!title) return;
+
+    const maxOrder =
+      todos.length > 0 ? Math.max(...todos.map((t) => t.order)) : 0;
+    /** @type {Todo} */
+    const newTodo = {
+      title,
+      completed: false,
+      pinned: false,
+      order: maxOrder + 1,
+      createdAt: new Date(),
+    };
+
+    const id = await createTodo(newTodo);
+    newTodo.id = id;
+    todos.push(newTodo);
+
+    todos.sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return a.order - b.order;
+    });
+
+    renderTodos();
+    input.value = "";
+  }
+
+  async function cleanList() {
+    const completed = todos.filter((t) => t.completed);
+    for (const todo of completed) {
+      if (todo.id) await deleteTodo(todo.id);
+    }
+    todos = todos.filter((t) => !t.completed);
+    renderTodos();
+  }
+
+  // Event delegation for task list
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+
+    const action = btn.getAttribute("data-action");
+    const card = btn.closest(".card");
+    const id = card ? parseInt(card.getAttribute("data-id") || "0") : 0;
+    const todo = todos.find((t) => t.id === id);
+
+    if (action === "delete" && todo && todo.id) {
+      await deleteTodo(todo.id);
+      todos = todos.filter((t) => t.id !== todo.id);
+      renderTodos();
+    }
+
+    if (action === "pin" && todo) {
+      todo.pinned = !todo.pinned;
+      await saveTodo(todo);
+      todos.sort((a, b) => {
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+        return a.order - b.order;
+      });
+      renderTodos();
+    }
+
+    if (action === "toggle" && todo) {
+      todo.completed = !todo.completed;
+      await saveTodo(todo);
+      btn.classList.toggle("primary");
+      const text = card?.querySelector(".task-text");
+      if (text) {
+        text.classList.toggle("completed");
+        text.style.textDecoration = todo.completed ? "line-through" : "none";
+        text.style.opacity = todo.completed ? "0.5" : "1";
+      }
+    }
+  });
+
+  // Edit task
+  document.addEventListener("click", (e) => {
+    const span = e.target.closest("span[data-action='edit']");
+    if (!span || span.querySelector("input")) return;
+
+    const currentText = span.textContent || "";
+    span.innerHTML = `<input type="text" value="${currentText}" class="w-100" style="border:none; background:transparent" />`;
+    const input = span.querySelector("input");
+    input.focus();
+
+    const saveEdit = async () => {
+      const newText = input.value.trim();
+      const card = span.closest(".card");
+      const id = parseInt(card?.getAttribute("data-id") || "0");
+      const todo = todos.find((t) => t.id === id);
+
+      if (todo && newText) {
+        todo.title = newText;
+        await saveTodo(todo);
+      }
+
+      span.innerHTML = newText || currentText;
+    };
+
+    input.addEventListener("blur", saveEdit);
+    input.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        input.blur();
+      }
+    });
+  });
+
+  // Add task button
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("#add-task-btn");
+    if (btn) addTask();
+  });
+
+  // Clean list button
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("#clean-list-btn");
+    if (btn) cleanList();
+  });
+
+  // Add task on Enter key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target?.id === "task-input") {
+      e.preventDefault();
+      addTask();
+    }
+  });
+
+  // Load todos on page load
+  document.addEventListener("DOMContentLoaded", loadTodos);
+</script>
+
+<style>
+  input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+</style>
