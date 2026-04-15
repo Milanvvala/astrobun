@@ -1,0 +1,60 @@
+---
+import { ChevronDown, ChevronUp } from "@lucide/astro";
+
+interface Props {
+  mode: "show" | "hide";
+}
+
+const { mode } = Astro.props;
+---
+
+<button 
+  class="navbar-toggle ghost small" 
+  data-mode={mode}
+  title={mode === "hide" ? "Hide Dashboard Nav" : "Show Dashboard Nav"}
+>
+  {mode === "hide" ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+</button>
+
+<script>
+  const STORAGE_KEY = "risebox-navbar-hidden";
+  const header = document.querySelector("#dashboard-header") || document.querySelector("header");
+
+  // Toggle navbar visibility
+  function toggle() {
+    const isHidden = localStorage.getItem(STORAGE_KEY) === "true";
+    localStorage.setItem(STORAGE_KEY, String(!isHidden));
+    updateUI();
+  }
+
+  // Update all toggle buttons and header visibility
+  function updateUI() {
+    const isHidden = localStorage.getItem(STORAGE_KEY) === "true";
+    
+    // Show/hide header
+    if (header) {
+      header.style.display = isHidden ? "none" : "";
+    }
+
+    // Update all toggle buttons
+    document.querySelectorAll(".navbar-toggle").forEach(btn => {
+      const btnMode = (btn as HTMLElement).dataset.mode;
+      const btnEl = btn as HTMLButtonElement;
+
+      if (btnMode === "hide") {
+        // Hide button when nav is hidden (it's hidden with nav)
+        btnEl.style.display = isHidden ? "none" : "";
+      } else if (btnMode === "show") {
+        // Show button only when nav is hidden
+        btnEl.style.display = isHidden ? "" : "none";
+      }
+    });
+  }
+
+  // Attach click handlers and initialize
+  document.querySelectorAll(".navbar-toggle").forEach(btn => {
+    btn.addEventListener("click", toggle);
+  });
+
+  updateUI();
+</script>

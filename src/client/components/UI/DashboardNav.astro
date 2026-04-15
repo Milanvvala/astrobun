@@ -1,0 +1,175 @@
+---
+import {
+  Bolt,
+  Cog,
+  Download,
+  FileText,
+  Hexagon,
+  ListTodo,
+  Moon,
+  Notebook,
+  NotepadText,
+  Plus,
+  SlidersHorizontal,
+  Sun,
+  X,
+} from "@lucide/astro";
+import NavbarToggle from "../NavbarToggle.astro";
+---
+
+<nav
+  class="p-2 hstack justify-between row"
+  style={{ borderBottom: "1px solid var(--border)" }}
+>
+  <div class="col-10">
+    <nav class="hstack gap-2 col-10">
+      <a href="/" class="hstack gap-2" style={{ textDecoration: "none" }}>
+        <Hexagon size={16} />
+        <strong style={{ fontSize: "var(--text-xl)" }}>RiseBox</strong>
+      </a>
+      <p style={{ margin: "0 var(--space-2) 0 var(--space-2)" }}>|</p>
+      <ot-dropdown>
+        <button popovertarget="demo-menu" class="outline small">
+          <NotepadText size={16} />
+          Note_1
+        </button>
+        <menu popover id="demo-menu">
+          <button role="menuitem" class="small"
+            ><Download size={16} />Profile</button
+          >
+          <button role="menuitem" class="small"
+            ><Download size={16} />Profile</button
+          >
+        </menu>
+      </ot-dropdown>
+      <button popovertarget="demo-menu" class="outline small">
+        <Notebook size={16} />
+        NoteBook_2
+      </button><button class="outline small">
+        <FileText size={16} />
+        File_New
+      </button>
+    </nav>
+  </div>
+  <div class="col-2 hstack gap-2">
+    <button class="small ghost"><Plus size={16} /></button>
+
+    <ot-dropdown>
+      <button role="menuitem" class="small ghost" popovertarget="new-menu"
+        ><Plus size={16} /></button
+      >
+      <menu popover id="new-menu">
+        <button role="menuitem"><NotepadText size={16} />New Note</button>
+        <button role="menuitem"><Notebook size={16} />New Notebook</button>
+        <button role="menuitem"><ListTodo size={16} />New Tasklist</button>
+      </menu>
+    </ot-dropdown>
+
+    <button
+      class="ghost small"
+      commandfor="settings-dialog"
+      command="show-modal"
+    >
+      <SlidersHorizontal size={16} />
+    </button>
+    <NavbarToggle mode="hide" />
+    <button class="ghost small" onclick="toggleTheme()">
+      <Moon class="icon-light" size={16} />
+      <Sun class="icon-dark" size={16} />
+    </button>
+  </div>
+</nav>
+
+<dialog id="settings-dialog" closedby="any">
+  <form method="dialog">
+    <header class="flex justify-between">
+      <h3>Settings</h3>
+    </header>
+    <div>
+      <label data-field>
+        Font
+        <select id="font-setting" name="font">
+          <option value="system">System Font</option>
+          <option value="serif">Serif</option>
+          <option value="mono">Mono</option>
+          <option value="handwritten">Handwritten</option>
+          <option value="humanist">Humanist</option>
+        </select>
+      </label>
+
+      <label data-field>
+        Font Size
+        <div class="hstack gap-2">
+          <input
+            type="range"
+            id="font-size-setting"
+            name="fontSize"
+            min="12"
+            max="24"
+            value="16"
+            style="flex: 1"
+          />
+          <output id="font-size-value">16px</output>
+        </div>
+      </label>
+
+      <label data-field>
+        Line Height
+        <div class="hstack gap-2">
+          <input
+            type="range"
+            id="line-height-setting"
+            name="lineHeight"
+            min="1"
+            max="2.5"
+            step="0.1"
+            value="1.5"
+            style="flex: 1"
+          />
+          <output id="line-height-value">1.5</output>
+        </div>
+      </label>
+
+      <label data-field>
+        Spell Checker
+        <div class="hstack gap-2">
+          <input
+            type="checkbox"
+            id="spellcheck-setting"
+            name="spellcheck"
+            role="switch"
+            checked
+          />
+          <span>Uses system spell checker</span>
+        </div>
+      </label>
+    </div>
+    <footer>
+      <button
+        type="button"
+        commandfor="settings-dialog"
+        command="close"
+        class="outline">Cancel</button
+      >
+      <button value="save">Save</button>
+    </footer>
+  </form>
+</dialog>
+
+<script>
+  const fontSizeInput = document.getElementById("font-size-setting");
+  const fontSizeOutput = document.getElementById("font-size-value");
+  if (fontSizeInput && fontSizeOutput) {
+    fontSizeInput.addEventListener("input", () => {
+      fontSizeOutput.textContent = fontSizeInput.value + "px";
+    });
+  }
+
+  const lineHeightInput = document.getElementById("line-height-setting");
+  const lineHeightOutput = document.getElementById("line-height-value");
+  if (lineHeightInput && lineHeightOutput) {
+    lineHeightInput.addEventListener("input", () => {
+      lineHeightOutput.textContent = lineHeightInput.value;
+    });
+  }
+</script>

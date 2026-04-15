@@ -1,0 +1,86 @@
+---
+import { Github, Instagram, Youtube } from "simple-icons-astro";
+---
+
+<footer style={{ borderTop: "1px solid var(--border)" }}>
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-4">
+        <strong style={{ fontSize: "var(--text-2)" }}>RiseBox</strong>
+        <p class="text-light mt-4" style={{ fontSize: "var(--text-7)" }}>
+          We help teams build better products, faster. Join thousands of
+          companies already using RiseBox.
+        </p>
+        <div class="hstack gap-2 mt-4">
+          <button type="button" class="ghost"> <Github /></button>
+          <button type="button" class="ghost"> <Instagram /> </button>
+          <button type="button" class="ghost"> <Youtube /> </button>
+        </div>
+      </div>
+      <div class="col-2">
+        <h5 style={{ fontSize: "var(--text-6)" }}>Tools</h5>
+        <ul class="unstyled vstack gap-2 mt-4">
+          <li>
+            <a href="/finance" class="text-light"> Finance </a>
+          </li>
+          <li>
+            <a href="/invoice" class="text-light"> Invoice </a>
+          </li>
+          <li>
+            <a href="/kanban" class="text-light"> Kanban </a>
+          </li>
+          <li>
+            <a href="/biome" class="text-light"> Biome </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-2">
+        <h5 style={{ fontSize: "var(--text-6)" }}>Services</h5>
+        <ul class="unstyled vstack gap-2 mt-4">
+          <li>
+            <a href="/notes" class="text-light"> Notes </a>
+          </li>
+          <li>
+            <a href="/test" class="text-light"> Dashboard </a>
+          </li>
+          <li>
+            <a href="/todo" class="text-light"> Tasks </a>
+          </li>
+          <li>
+            <a href="/pomodoro" class="text-light"> Timer </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-3 offset-1">
+        <h5 style={{ fontSize: "var(--text-6)" }}>Stay Updated</h5>
+        <p class="text-light mt-2" style={{ fontSize: "var(--text-7)" }}>
+          Subscribe to our newsletter.
+        </p>
+        <fieldset class="group mt-2">
+          <input type="email" placeholder="Enter your email" />
+          <button type="button" class="small"> Subscribe </button>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+  <!-- copyrights -->
+  <div class="p-4" style={{ borderTop: "1px solid var(--border)" }}>
+    <div class="container">
+      <div class="hstack justify-between">
+        <p class="text-lighter">© 2026 RiseBox. All rights reserved.</p>
+        <ul class="unstyled hstack gap-4">
+          <li>
+            <a href="#privacy" class="text-light"> Privacy Policy </a>
+          </li>
+          <li>
+            <a href="#terms"> Terms of Service </a>
+          </li>
+          <li>
+            <a href="#status"> Status </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

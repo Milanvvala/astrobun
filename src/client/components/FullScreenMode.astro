@@ -1,0 +1,31 @@
+---
+import { Expand, Maximize2, Minimize2, Shrink } from "@lucide/astro";
+---
+
+<button id="fullscreen-btn" class="ghost" title="Toggle Full Screen">
+  <Expand size={16} class="expand-icon" />
+  <Shrink size={16} class="shrink-icon" style="display: none;" />
+</button>
+
+<script>
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  const expandIcon = fullscreenBtn?.querySelector(".expand-icon") as HTMLElement;
+  const shrinkIcon = fullscreenBtn?.querySelector(".shrink-icon") as HTMLElement;
+
+  function updateIcons() {
+    const isFullscreen = !!document.fullscreenElement;
+    if (expandIcon) expandIcon.style.display = isFullscreen ? "none" : "";
+    if (shrinkIcon) shrinkIcon.style.display = isFullscreen ? "" : "none";
+  }
+
+  fullscreenBtn?.addEventListener("click", () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  });
+
+  document.addEventListener("fullscreenchange", updateIcons);
+  updateIcons();
+</script>

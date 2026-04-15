@@ -1,0 +1,141 @@
+---
+import { PictureInPicture2 } from "@lucide/astro";
+---
+
+<button id="floating-window-btn" class="ghost" title="Toggle Floating Window">
+  <PictureInPicture2 size={16} />
+</button>
+
+<script>
+  let floatingWin: Window | null = null;
+
+  function toggleFloatingWindow() {
+    if (floatingWin && !floatingWin.closed) {
+      floatingWin.focus();
+      return;
+    }
+
+    const originalTextarea = document.getElementById("note-content") as HTMLTextAreaElement;
+    if (!originalTextarea) return;
+
+    const newWindow = window.open(
+      "",
+      "RiseBoxNotes",
+      "width=450,height=550,left=200,top=100,resizable=yes,minimizable=yes,maximizable=yes"
+    );
+
+    if (!newWindow) {
+      alert("Please allow popups to use floating window mode.");
+      return;
+    }
+
+    const content = originalTextarea.value;
+
+    newWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>RiseBox Notes</title>
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          html, body { height: 100%; overflow: hidden; }
+          body { 
+            font-family: system-ui, sans-serif; 
+            background: #1a1a1a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+          }
+          .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #252525;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+          }
+          .title {
+            font-size: 12px;
+            color: #888;
+          }
+          .back-btn {
+            background: #333;
+            border: none;
+            color: #e0e0e0;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+          }
+          .back-btn:hover { background: #444; }
+          textarea {
+            flex: 1;
+            width: 100%;
+            border: none;
+            resize: none;
+            font-size: 16px;
+            line-height: 1.8;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-family: inherit;
+            padding: 12px;
+          }
+          textarea:focus { outline: none; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <span class="title">RiseBox Notes</span>
+          <button class="back-btn" id="back-btn">Back to Tab</button>
+        </div>
+        <textarea id="floating-content"></textarea>
+      </body>
+      </html>
+    `);
+
+    newWindow.document.close();
+
+    const textarea = newWindow.document.getElementById("floating-content") as HTMLTextAreaElement;
+    const backBtn = newWindow.document.getElementById("back-btn") as HTMLButtonElement;
+
+    if (backBtn) {
+      backBtn.onclick = () => {
+        window.focus();
+      };
+    }
+
+    if (textarea) {
+      textarea.value = content;
+      textarea.focus();
+
+      textarea.addEventListener("input", () => {
+        originalTextarea.value = textarea.value;
+        originalTextarea.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+    }
+
+    originalTextarea.addEventListener("input", () => {
+      if (textarea && document.activeElement !== textarea) {
+        textarea.value = originalTextarea.value;
+      }
+    });
+
+    newWindow.addEventListener("beforeunload", () => {
+      floatingWin = null;
+    });
+
+    floatingWin = newWindow;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const floatingBtn = document.getElementById("floating-window-btn");
+    floatingBtn?.addEventListener("click", toggleFloatingWindow);
+  });
+
+  window.addEventListener("message", (event) => {
+    if (event.data === "focus-main") {
+      window.focus();
+    }
+  });
+</script>

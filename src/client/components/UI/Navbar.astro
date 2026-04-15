@@ -1,0 +1,57 @@
+---
+import { ArrowRight, Camera, DoorOpen, Hexagon, Moon, Search, Sun } from "@lucide/astro";
+---
+
+<nav style={{ borderBottom: "1px solid var(--border)" }}>
+  <div class="container mt-2 mb-2 hstack justify-between">
+    <!-- Logo -->
+    <a href="/" class="hstack gap-2" style={{ textDecoration: "none" }}>
+      <Hexagon size={32} />
+      <strong style={{ fontSize: "var(--text-xl)" }}>RiseBox</strong>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="hstack gap-4">
+      <a href="/test" class="button ghost secondary">Dashboaard</a>
+      <a href="#second" class="button ghost secondary">Contact</a>
+      <a href="#third" class="button ghost secondary">Pricing</a>
+      <a href="#button" class="button ghost secondary">Blog</a>
+    </nav>
+
+    <!-- Buttons -->
+    <div class="hstack gap-2">
+      <!-- Profile Dropdown -->
+      <!-- <ot-dropdown>
+        <button popovertarget="demo-menu" class="ghost">
+          <figure data-variant="avatar" aria-label="Jane Doe">
+            <img src="https://api.dicebear.com/9.x/micah/svg" alt="" />
+          </figure>
+        </button>
+        <menu popover id="demo-menu">
+          <button role="menuitem">Profile</button>
+          <button role="menuitem">Settings</button>
+          <button role="menuitem">Help</button>
+          <hr />
+          <button role="menuitem">Logout</button>
+        </menu>
+      </ot-dropdown> -->
+
+      <!-- Theme Toggle -->
+      <button class="ghost mt-2 mb-2" onclick="toggleTheme()">
+        <Moon class="icon-light" size={16} />
+        <Sun class="icon-dark" size={16} />
+      </button>
+
+      <!-- Search Field -->
+      <!-- <fieldset class="group" style={{ width: "200px" }}>
+        <input type="text" placeholder="Search products..." />
+        <button type="button" class="outline"><Search size={16} /> </button>
+      </fieldset> -->
+
+      <!-- Button with Icon -->
+      <button type="button" class="outline">
+        Login <DoorOpen size={16} />
+      </button>
+    </div>
+  </div>
+</nav>
